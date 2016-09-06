@@ -15,8 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('my-first-route', function () {
-$results = DB::select('SELECT * FROM book');
+Route::get('books.json', function () {
+	$results = DB::select('SELECT * FROM book');
 
-    return response()->json($results);
+	return response()->json($results);
 });
