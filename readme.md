@@ -10,3 +10,6 @@ The system is a catalog of tasks submitted by users. Users can either submit a t
   For MAC: https://bitnami.com/stack/mapp
 
 2. Follow this [documentation](https://wiki.bitnami.com/Components/PHP_Frameworks/Laravel) to activate Laravel in Bitnami Stack.
+
+## Others
+* To access PostgreSQL, use phpPgAdmin application at http://127.0.0.1/phppgadmin.
