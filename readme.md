@@ -11,7 +11,8 @@ The system is a catalog of tasks submitted by users. Users can either submit a t
 
 2. Fork this project to replace the original files in /opt/bitnami/frameworks/laravel
 3. Create a new database user <b>forge</b> and set the password to <b>P@ssw0rd</b>
-4. Login to phppgadmin via the forge account and import the dump file, which can be found at /opt/bitnami/frameworks/laravel/database/dump.sql
+4. Create a new database and called it <b>task_db</b>
+4. Import the dump file, which can be found at /opt/bitnami/frameworks/laravel/database/dump.sql
 5. Enter http://<i></i>127.0.0.1:[port number] and you should be able to see the homepage.
 
 ## Others
