@@ -12,4 +12,8 @@ The system is a catalog of tasks submitted by users. Users can either submit a t
 2. Follow this [documentation](https://wiki.bitnami.com/Components/PHP_Frameworks/Laravel) to activate Laravel in Bitnami Stack.
 
 ## Others
-* To access PostgreSQL, use phpPgAdmin application at http://127.0.0.1/phppgadmin.
+* To access PostgreSQL, use phpPgAdmin application at http://127.0.0.1:[port number]/phppgadmin.
+  
+  [Default port number]  
+  Windows: 80  
+  Mac OS X and Linux: 8080
