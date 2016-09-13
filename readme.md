@@ -25,7 +25,7 @@ The system is a catalog of tasks submitted by users. Users can either submit a t
   
       > Access the example application via your brower at http://<i></i>127.0.0.1:[port number]/laravel
     
-3. Move the Laravel example application such that it is available at the root URL of the server (without the /laravel URL suffux), follow these steps:
+3. Move the Laravel example application such that it is available at the root URL of the server (without the /laravel URL suffix), follow these steps:
 
    1. Edit
    
