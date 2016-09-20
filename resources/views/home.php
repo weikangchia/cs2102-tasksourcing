@@ -126,10 +126,10 @@
       <a class="active item">Home</a>
       <div class="right menu">
         <div class="item">
-          <a class="ui button">Log in</a>
+          <a class="ui button" href="login">Log in</a>
         </div>
         <div class="item">
-          <a class="ui primary button">Sign Up</a>
+          <a class="ui primary button" href="join">Sign Up</a>
         </div>
       </div>
     </div>
@@ -138,8 +138,8 @@
   <!-- Sidebar Menu -->
   <div class="ui vertical inverted sidebar menu">
     <a class="active item">Home</a>
-    <a class="item">Login</a>
-    <a class="item">Signup</a>
+    <a class="item" href="login">Login</a>
+    <a class="item" href="join">Signup</a>
   </div>
 
   <!-- Page Contents -->
@@ -153,8 +153,8 @@
           </a>
           <a class="active item">Home</a>
           <div class="right item">
-            <a class="ui inverted button">Log in</a>
-            <a class="ui inverted button">Sign Up</a>
+            <a class="ui inverted button" href="login">Log in</a>
+            <a class="ui inverted button" href="join">Sign Up</a>
           </div>
         </div>
       </div>
