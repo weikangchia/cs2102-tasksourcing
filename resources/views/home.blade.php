@@ -125,12 +125,18 @@
     <div class="ui container">
       <a class="active item">Home</a>
       <div class="right menu">
+        @if(Auth::check())
         <div class="item">
-          <a class="ui button" href="login">Log in</a>
+          <a class="ui button" href="logout">Log Out</a>
+        </div>
+        @else
+        <div class="item">
+          <a class="ui button" href="login">Log In</a>
         </div>
         <div class="item">
           <a class="ui primary button" href="join">Sign Up</a>
         </div>
+        @endif
       </div>
     </div>
   </div>
@@ -138,8 +144,12 @@
   <!-- Sidebar Menu -->
   <div class="ui vertical inverted sidebar menu">
     <a class="active item">Home</a>
-    <a class="item" href="login">Login</a>
-    <a class="item" href="join">Signup</a>
+    @if(Auth::check())
+    <a class="item" href="logout">Log Out</a>
+    @else
+    <a class="item" href="login">Log In</a>
+    <a class="item" href="join">Sign Up</a>
+    @endif
   </div>
 
   <!-- Page Contents -->
@@ -153,8 +163,12 @@
           </a>
           <a class="active item">Home</a>
           <div class="right item">
-            <a class="ui inverted button" href="login">Log in</a>
+            @if(Auth::check())
+            <a class="ui inverted button" href="logout">Log Out</a>
+            @else
+            <a class="ui inverted button" href="login">Log In</a>
             <a class="ui inverted button" href="join">Sign Up</a>
+            @endif
           </div>
         </div>
       </div>
