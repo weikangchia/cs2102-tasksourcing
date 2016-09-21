@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Task Hopper</title>
+  <title>Homepage - TaskHopper</title>
   <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
 
   <style type="text/css">
@@ -96,19 +96,14 @@
       font-size: 1.5em;
     }
   }
-
-
   </style>
 
   <script src="js/jquery.min.js"></script>
   <script src="js/semantic.min.js"></script>
   <script>
-  $(document)
-  .ready(function() {
-
+  $(document).ready(function() {
     // fix menu when passed
-    $('.masthead')
-    .visibility({
+    $('.masthead').visibility({
       once: false,
       onBottomPassed: function() {
         $('.fixed.menu').transition('fade in');
@@ -116,16 +111,11 @@
       onBottomPassedReverse: function() {
         $('.fixed.menu').transition('fade out');
       }
-    })
-    ;
+    });
 
     // create sidebar and attach to menu open
-    $('.ui.sidebar')
-    .sidebar('attach events', '.toc.item')
-    ;
-
-  })
-  ;
+    $('.ui.sidebar').sidebar('attach events', '.toc.item');
+  });
   </script>
 </head>
 <body>
@@ -134,15 +124,12 @@
   <div class="ui large top fixed hidden menu">
     <div class="ui container">
       <a class="active item">Home</a>
-      <a class="item">Work</a>
-      <a class="item">Company</a>
-      <a class="item">Careers</a>
       <div class="right menu">
         <div class="item">
-          <a class="ui button">Log in</a>
+          <a class="ui button" href="login">Log in</a>
         </div>
         <div class="item">
-          <a class="ui primary button">Sign Up</a>
+          <a class="ui primary button" href="join">Sign Up</a>
         </div>
       </div>
     </div>
@@ -151,13 +138,9 @@
   <!-- Sidebar Menu -->
   <div class="ui vertical inverted sidebar menu">
     <a class="active item">Home</a>
-    <a class="item">Work</a>
-    <a class="item">Company</a>
-    <a class="item">Careers</a>
-    <a class="item">Login</a>
-    <a class="item">Signup</a>
+    <a class="item" href="login">Login</a>
+    <a class="item" href="join">Signup</a>
   </div>
-
 
   <!-- Page Contents -->
   <div class="pusher">
@@ -169,124 +152,98 @@
             <i class="sidebar icon"></i>
           </a>
           <a class="active item">Home</a>
-          <a class="item">Work</a>
-          <a class="item">Company</a>
-          <a class="item">Careers</a>
           <div class="right item">
-            <a class="ui inverted button">Log in</a>
-            <a class="ui inverted button">Sign Up</a>
+            <a class="ui inverted button" href="login">Log in</a>
+            <a class="ui inverted button" href="join">Sign Up</a>
           </div>
         </div>
       </div>
 
       <div class="ui text container">
         <h1 class="ui inverted header">
-          Task Hopper
+          TaskHopper
         </h1>
-        <h2>We do chores.<br/>You live life.</h2>
-        <div class="ui big icon input" style="width:70%">
-          <input type="text" placeholder="What do you need help with?">
-          <i class="search icon"></i>
+        <h2>We do chores.<br/>
+          You live life.
+        </h2>
+        <div class="ui hidden divider"></div>
+        <div class="ui icon input">
+          <input type="text" placeholder="Search...">
+          <i class="inverted circular search link icon"></i>
         </div>
       </div>
-
     </div>
 
     <div class="ui vertical stripe segment">
-      <div class="ui middle aligned stackable grid container">
-        <div class="row">
-          <div class="center aligned column">
-            <h1>How We Can Help</h1>
+      <div class="doubling stackable three column ui grid container">
+        <div class="row centered">
+          <h1 class="ui center aligned header">Put TaskHopper to Work</h1>
+        </div>
+        <?php foreach($results as $result): ?>
+          <div class="column">
+            <div class="ui fluid card">
+              <div class="image">
+                <img class="img mini" src="img/photogenic-task-rabbit.jpg">
+              </div>
+              <div class="content">
+                <div class="header"><?php echo $result->category ?></div>
+                <div class="description">
+                  <?php echo $result->name ?>
+                </div>
+              </div>
+              <div class="ui bottom attached button">
+                Book
+              </div>
+            </div>
           </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+
+    <div class="ui vertical stripe segment">
+      <div class="ui stackable grid container">
+        <div class="row centered">
+          <h1 class="ui center aligned header">How it Works?</h1>
         </div>
         <div class="row">
-
-          <div class="ui three column grid">
-            <div class="stretched row">
-
-              <?php foreach($results as $result): ?>
-                <div class="column">
-                  <div class="ui card">
-                    <div class="ui fluid image">
-                      <div class="ui black ribbon label">
-                        <?php echo $result->category ?>
-                      </div>
-                      <img src="/img/cleanhouse.jpg">
-                    </div>
-                    <div class="content">
-                      <a class="header" href="#"><?php echo $result->name ?></a>
-                    </div>
-                  </div>
+          <div class="column center aligned">
+            <div class="ui steps">
+              <div class="step">
+                <i class="hand pointer icon"></i>
+                <div class="content">
+                  <div class="title left aligned">Pick a Task</div>
+                  <div class="description">Choose from a list of popular chores and errands</div>
                 </div>
-              <?php endforeach; ?>
+              </div>
+              <div class="active step">
+                <i class="users icon"></i>
+                <div class="content">
+                  <div class="title">Get Matched</div>
+                  <div class="description">We'll connect you with a skilled Tasker<br />within minutes of your request</div>
+                </div>
+              </div>
+              <div class="disabled step">
+                <i class="info icon"></i>
+                <div class="content">
+                  <div class="title">Get it Done</div>
+                  <div class="description">Your Tasker arrives, completes the job</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-    <div class="ui vertical stripe quote segment">
-      <div class="ui equal width stackable internally celled grid">
-        <div class="center aligned row">
-          <div class="column">
-            <h3>"What a Company"</h3>
-            <p>That is what they all say about us</p>
-          </div>
-          <div class="column">
-            <h3>"I shouldn't have gone with their competitor."</h3>
-            <p>
-              <img src="assets/images/avatar/nan.jpg" class="ui avatar image"> <b>Nan</b> Chief Fun Officer Acme Toys
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="ui vertical stripe segment">
-      <div class="ui text container">
-        <h3 class="ui header">Breaking The Grid, Grabs Your Attention</h3>
-        <p>Instead of focusing on content creation and hard work, we have learned how to master the art of doing nothing by providing massive amounts of whitespace and generic content that can seem massive, monolithic and worth your attention.</p>
-        <a class="ui large button">Read More</a>
-        <h4 class="ui horizontal header divider">
-          <a href="#">Case Studies</a>
-        </h4>
-        <h3 class="ui header">Did We Tell You About Our Bananas?</h3>
-        <p>Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but its really true. It took years of gene splicing and combinatory DNA research, but our bananas can really dance.</p>
-        <a class="ui large button">I'm Still Quite Interested</a>
-      </div>
-    </div>
-
 
     <div class="ui inverted vertical footer segment">
-      <div class="ui container">
-        <div class="ui stackable inverted divided equal height stackable grid">
-          <div class="three wide column">
-            <h4 class="ui inverted header">About</h4>
-            <div class="ui inverted link list">
-              <a href="#" class="item">Sitemap</a>
-              <a href="#" class="item">Contact Us</a>
-              <a href="#" class="item">Religious Ceremonies</a>
-              <a href="#" class="item">Gazebo Plans</a>
-            </div>
-          </div>
-          <div class="three wide column">
-            <h4 class="ui inverted header">Services</h4>
-            <div class="ui inverted link list">
-              <a href="#" class="item">Banana Pre-Order</a>
-              <a href="#" class="item">DNA FAQ</a>
-              <a href="#" class="item">How To Access</a>
-              <a href="#" class="item">Favorite X-Men</a>
-            </div>
-          </div>
-          <div class="seven wide column">
-            <h4 class="ui inverted header">Footer Header</h4>
-            <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-          </div>
+      <div class="ui container grid centered">
+        <div class="row centered">
+          © 2016 TaskHopper
         </div>
       </div>
     </div>
   </div>
 
 </body>
+
 </html>

@@ -13,6 +13,14 @@
 
 Route::get('/', 'HomeController@index');
 
+Route::get('join', function() {
+  return View::make('sign-up');
+});
+
+Route::get('login', function() {
+  return View::make('login');
+});
+
 Route::get('books.json', function () {
   //$results = DB::select('SELECT * FROM book');
   $results = DB::select('SELECT t.name, t.category FROM task t');
