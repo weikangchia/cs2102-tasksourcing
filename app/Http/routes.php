@@ -12,14 +12,15 @@
 */
 
 Route::get('/', 'HomeController@index');
+Route::get('home', ['as' => 'home', 'uses' => 'HomeController@index']);
 
 Route::get('join', function() {
   return View::make('sign-up');
 });
 
-Route::get('login', function() {
-  return View::make('login');
-});
+Route::get('login', ['as' => 'login', 'uses' => 'AuthController@getLogin']);
+Route::post('handleLogin', ['as' => 'handleLogin', 'uses' => 'AuthController@handleLogin']);
+Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
 
 Route::get('books.json', function () {
   //$results = DB::select('SELECT * FROM book');
