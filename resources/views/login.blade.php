@@ -28,10 +28,8 @@
   }
   </style>
   <script>
-  $(document)
-  .ready(function() {
-    $('.ui.form')
-    .form({
+  $(document).ready(function() {
+    $('.ui.form').form({
       fields: {
         email: {
           identifier  : 'email',
@@ -60,10 +58,8 @@
           ]
         }
       }
-    })
-    ;
-  })
-  ;
+    });
+  });
   </script>
 </head>
 <body>
@@ -73,32 +69,31 @@
       <h2 class="ui teal image header">
         <img src="assets/images/logo.png" class="image">
         <div class="content">
-          Log-in to your account
+          Log In to your account
         </div>
       </h2>
-      <form class="ui large form">
-        <div class="ui stacked segment">
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="user icon"></i>
-              <input type="text" name="email" placeholder="E-mail address">
-            </div>
+      {!! Form::open(array('route' => 'handleLogin', 'class' => 'ui form')) !!}
+      <div class="ui stacked segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            {!! Form::text('email', null, array('placeholder' => 'Email')) !!}
           </div>
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="lock icon"></i>
-              <input type="password" name="password" placeholder="Password">
-            </div>
-          </div>
-          <div class="ui fluid large teal submit button">Login</div>
         </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            {!! Form::password('password', array('placeholder' => 'Password')) !!}
+          </div>
+        </div>
+        {!! Form::token() !!}
+        {!! Form::submit('Login', array('class' => 'ui fluid large teal submit button')) !!}
+      </div>
 
-        <div class="ui error message"></div>
-
-      </form>
-
+      <div class="ui error message"></div>
+      {!! Form::close() !!}
       <div class="ui message">
-        New to us? <a href="#">Sign Up</a>
+        New to us? <a href="join">Sign Up</a>
       </div>
     </div>
   </div>
