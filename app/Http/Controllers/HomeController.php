@@ -17,8 +17,8 @@ class HomeController extends Controller
   */
   public function index()
   {
-    $results = DB::select('SELECT t.name, t.category FROM task t');
-    return view('home')->with('results', $results);
+    $results = DB::select('SELECT c.name, c.description FROM category c');
+    return view('home')->with('categories', $results);
   }
 
   /**
