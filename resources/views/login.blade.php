@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Login - TaskHopper</title>
+  <title>Log In - TaskHopper</title>
   <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
 
   <script src="js/jquery.min.js"></script>
@@ -27,40 +27,6 @@
     max-width: 450px;
   }
   </style>
-  <script>
-  $(document).ready(function() {
-    $('.ui.form').form({
-      fields: {
-        email: {
-          identifier  : 'email',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Please enter your e-mail'
-            },
-            {
-              type   : 'email',
-              prompt : 'Please enter a valid e-mail'
-            }
-          ]
-        },
-        password: {
-          identifier  : 'password',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Please enter your password'
-            },
-            {
-              type   : 'length[6]',
-              prompt : 'Your password must be at least 6 characters'
-            }
-          ]
-        }
-      }
-    });
-  });
-  </script>
 </head>
 <body>
 
@@ -90,10 +56,20 @@
         {!! Form::submit('Login', array('class' => 'ui fluid large teal submit button')) !!}
       </div>
 
-      <div class="ui error message"></div>
+      @if(count($errors))
+      <div class="ui form error">
+        <div class="ui error message">
+          <ul class="list">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      </div>
+      @endif
       {!! Form::close() !!}
       <div class="ui message">
-        New to us? <a href="join">Sign Up</a>
+        New to us? {{ link_to_route('users.create', 'Sign Up') }}</a>
       </div>
     </div>
   </div>
