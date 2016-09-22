@@ -13,6 +13,27 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: task_db; Type: COMMENT; Schema: -; Owner: forge
+--
+
+COMMENT ON DATABASE task_db IS 'task database';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -50,14 +71,14 @@ CREATE TABLE users (
     password character varying(120) NOT NULL,
     first_name character varying(64),
     last_name character varying(64),
-    role character varying(6),
+    role character varying(5) DEFAULT 'user'::character varying NOT NULL,
     avatar character varying(120),
-    reputation integer DEFAULT 0,
-    created_at date,
+    reputation integer DEFAULT 0 NOT NULL,
+    created_at date NOT NULL,
     bio character varying(120),
     remember_token character varying(120),
     updated_at date,
-    CONSTRAINT users_role_check CHECK ((((role)::text = 'admin'::text) OR ((role)::text = 'normal'::text)))
+    CONSTRAINT users_role_check CHECK ((((role)::text = 'admin'::text) OR ((role)::text = 'user'::text)))
 );
 
 
@@ -180,7 +201,7 @@ The New Rules of Marketing and PR: How to Use Social Media, Blogs, News Releases
 -- Name: member_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
 --
 
-SELECT pg_catalog.setval('member_uid_seq', 2, true);
+SELECT pg_catalog.setval('member_uid_seq', 10, true);
 
 
 --
@@ -214,7 +235,9 @@ SELECT pg_catalog.setval('task_task_id_seq', 4, true);
 --
 
 COPY users (id, username, email, password, first_name, last_name, role, avatar, reputation, created_at, bio, remember_token, updated_at) FROM stdin;
-2	weikangchia	weikangchia@gmail.com	$2y$10$YOAya02z6TU0Q11hY1s8buDfmEEGas4FLbKupQHqebEohxZ4ljVdK	\N	\N	normal	\N	0	2016-09-21	\N	yiCm7Hp3zV06xlqtEGRNjv7Ds4BQqY6A9hTJfveJ7IKHPlfNPUdeEZiCVM8L	2016-09-21
+8	weikangchia	weikangchia@mailinator.com	$2y$10$QNJXm3RdBDHW94vSHzYW4.RY4qCK8oAwpYJiFXk8YKjV3fbA6U3SS	\N	\N	user	\N	0	2016-09-22	\N	\N	2016-09-22
+9	david	david@mailinator.com	$2y$10$R234Bd.VgiA2TWJcm6Dky.ME0FK5EtLvM0nd6D5tG9XW/fUHvzLRy	\N	\N	user	\N	0	2016-09-22	\N	\N	2016-09-22
+10	admin	admin@mailinator.com	$2y$10$kf.h8wrPz4Omx8l0oSFeguFWToTQ6gCP.NVLPnL2F./idBFa./V5a	\N	\N	admin	\N	0	2016-09-22	\N	\N	2016-09-22
 \.
 
 
@@ -257,8 +280,8 @@ ALTER TABLE ONLY users
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 GRANT ALL ON SCHEMA public TO forge;
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
