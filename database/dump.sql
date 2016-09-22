@@ -13,27 +13,6 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: task_db; Type: COMMENT; Schema: -; Owner: postgres
---
-
-COMMENT ON DATABASE task_db IS 'task database';
-
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -59,6 +38,51 @@ CREATE TABLE book (
 
 
 ALTER TABLE book OWNER TO forge;
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: forge
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    username character varying(120) NOT NULL,
+    email character varying(120) NOT NULL,
+    password character varying(120) NOT NULL,
+    first_name character varying(64),
+    last_name character varying(64),
+    role character varying(6),
+    avatar character varying(120),
+    reputation integer DEFAULT 0,
+    created_at date,
+    bio character varying(120),
+    remember_token character varying(120),
+    updated_at date,
+    CONSTRAINT users_role_check CHECK ((((role)::text = 'admin'::text) OR ((role)::text = 'normal'::text)))
+);
+
+
+ALTER TABLE users OWNER TO forge;
+
+--
+-- Name: member_uid_seq; Type: SEQUENCE; Schema: public; Owner: forge
+--
+
+CREATE SEQUENCE member_uid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE member_uid_seq OWNER TO forge;
+
+--
+-- Name: member_uid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: forge
+--
+
+ALTER SEQUENCE member_uid_seq OWNED BY users.id;
+
 
 --
 -- Name: task; Type: TABLE; Schema: public; Owner: forge
@@ -130,6 +154,13 @@ ALTER TABLE ONLY task ALTER COLUMN name SET DEFAULT nextval('task_name_seq'::reg
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: forge
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('member_uid_seq'::regclass);
+
+
+--
 -- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: forge
 --
 
@@ -146,12 +177,21 @@ The New Rules of Marketing and PR: How to Use Social Media, Blogs, News Releases
 
 
 --
+-- Name: member_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
+--
+
+SELECT pg_catalog.setval('member_uid_seq', 2, true);
+
+
+--
 -- Data for Name: task; Type: TABLE DATA; Schema: public; Owner: forge
 --
 
 COPY task (task_id, name, category) FROM stdin;
 1	Clean your house	General Cleaning
 2	Run your errands	Delivery & Shopping
+3	Pack your boxes	Book Moving
+4	Pack your boxes 1	Book Moving
 \.
 
 
@@ -166,7 +206,16 @@ SELECT pg_catalog.setval('task_name_seq', 1, false);
 -- Name: task_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
 --
 
-SELECT pg_catalog.setval('task_task_id_seq', 2, true);
+SELECT pg_catalog.setval('task_task_id_seq', 4, true);
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: forge
+--
+
+COPY users (id, username, email, password, first_name, last_name, role, avatar, reputation, created_at, bio, remember_token, updated_at) FROM stdin;
+2	weikangchia	weikangchia@gmail.com	$2y$10$YOAya02z6TU0Q11hY1s8buDfmEEGas4FLbKupQHqebEohxZ4ljVdK	\N	\N	normal	\N	0	2016-09-21	\N	yiCm7Hp3zV06xlqtEGRNjv7Ds4BQqY6A9hTJfveJ7IKHPlfNPUdeEZiCVM8L	2016-09-21
+\.
 
 
 --
@@ -191,6 +240,14 @@ ALTER TABLE ONLY book
 
 ALTER TABLE ONLY task
     ADD CONSTRAINT task_pkey PRIMARY KEY (task_id);
+
+
+--
+-- Name: users_primary_key; Type: CONSTRAINT; Schema: public; Owner: forge
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_primary_key PRIMARY KEY (id);
 
 
 --
