@@ -127,14 +127,14 @@
       <div class="right menu">
         @if(Auth::check())
         <div class="item">
-          <a class="ui button" href="logout">Log Out</a>
+          {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui button')) }}
         </div>
         @else
         <div class="item">
-          <a class="ui button" href="login">Log In</a>
+          {{ link_to_route('login', 'Log In', '', array('class' => 'ui button')) }}
         </div>
         <div class="item">
-          <a class="ui primary button" href="join">Sign Up</a>
+          {{ link_to_route('users.create', 'Sign Up', '', array('class' => 'ui primary button')) }}
         </div>
         @endif
       </div>
@@ -145,10 +145,10 @@
   <div class="ui vertical inverted sidebar menu">
     <a class="active item">Home</a>
     @if(Auth::check())
-    <a class="item" href="logout">Log Out</a>
+    {{ link_to_route('logout', 'Log Out', '', array('class' => 'item')) }}
     @else
-    <a class="item" href="login">Log In</a>
-    <a class="item" href="join">Sign Up</a>
+    {{ link_to_route('login', 'Log In', '', array('class' => 'item')) }}
+    {{ link_to_route('users.create', 'Sign Up', '', array('class' => 'item')) }}
     @endif
   </div>
 
@@ -164,10 +164,10 @@
           <a class="active item">Home</a>
           <div class="right item">
             @if(Auth::check())
-            <a class="ui inverted button" href="logout">Log Out</a>
+            {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui inverted button')) }}
             @else
-            <a class="ui inverted button" href="login">Log In</a>
-            <a class="ui inverted button" href="join">Sign Up</a>
+            {{ link_to_route('login', 'Log In', '', array('class' => 'ui inverted button')) }}
+            {{ link_to_route('users.create', 'Sign Up', '', array('class' => 'ui inverted button')) }}
             @endif
           </div>
         </div>
@@ -193,16 +193,16 @@
         <div class="row centered">
           <h1 class="ui center aligned header">Put TaskHopper to Work</h1>
         </div>
-        <?php foreach($results as $result): ?>
+        @foreach($categories as $category)
           <div class="column">
             <div class="ui fluid card">
               <div class="image">
                 <img class="img mini" src="img/photogenic-task-rabbit.jpg">
               </div>
               <div class="content">
-                <div class="header"><?php echo $result->category ?></div>
+                <div class="header">{{ $category->name }}</div>
                 <div class="description">
-                  <?php echo $result->name ?>
+                  {{ $category->description }}
                 </div>
               </div>
               <div class="ui bottom attached button">
@@ -210,7 +210,7 @@
               </div>
             </div>
           </div>
-        <?php endforeach; ?>
+        @endforeach
       </div>
     </div>
 
@@ -221,26 +221,33 @@
         </div>
         <div class="row">
           <div class="column center aligned">
-            <div class="ui steps">
+            <div class="ui four steps">
+              <div class="step">
+                <i class="write icon"></i>
+                <div class="content">
+                  <div class="title left aligned">Create a Task</div>
+                  <div class="description">Create your task under the above category.</div>
+                </div>
+              </div>
+              <div class="step">
+                <i class="users icon"></i>
+                <div class="content">
+                  <div class="title">Task in Bidding</div>
+                  <div class="description">Interested Taskers around you will bid for your task.</div>
+                </div>
+              </div>
               <div class="step">
                 <i class="hand pointer icon"></i>
                 <div class="content">
-                  <div class="title left aligned">Pick a Task</div>
-                  <div class="description">Choose from a list of popular chores and errands</div>
-                </div>
-              </div>
-              <div class="active step">
-                <i class="users icon"></i>
-                <div class="content">
-                  <div class="title">Get Matched</div>
-                  <div class="description">We'll connect you with a skilled Tasker<br />within minutes of your request</div>
+                  <div class="title left aligned">Select your Tasker</div>
+                  <div class="description">Choose your Tasker based on bid price and reputation.</div>
                 </div>
               </div>
               <div class="disabled step">
                 <i class="info icon"></i>
                 <div class="content">
-                  <div class="title">Get it Done</div>
-                  <div class="description">Your Tasker arrives, completes the job</div>
+                  <div class="title">Task Complete</div>
+                  <div class="description">Your Tasker arrives, completes the job.</div>
                 </div>
               </div>
             </div>
