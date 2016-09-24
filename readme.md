@@ -82,8 +82,7 @@ The system is a catalog of tasks submitted by users. Users can either submit a t
       * Select `SQL` tab
       * Click `Choose File` and select the dump file that you have just downloaded
       * Click `Execute`
-5. Fork this project to your GitHub account.
-6. Go to
+5. Go to
 
     > For Windows: C:\Bitnami\wappstack-5.6.25-0\frameworks\laravel\  
     > For Mac: ../Applications/mappstack-5.6.25-0/frameworks/laravel/
@@ -92,13 +91,13 @@ The system is a catalog of tasks submitted by users. Users can either submit a t
     > /vendor  
     > /conf
   
-7. Clone the fork onto  
+6. Clone this repo onto  
 
     > For Windows: C:\Bitnami\wappstack-5.6.25-0\frameworks\laravel\  
     > For Mac: ../Applications/mappstack-5.6.25-0/frameworks/laravel/
 
-8. Copy all the files from the `cs2102-tasksourcing` folder to the parent and remove this folder.
-9. Enter http://<i></i>127.0.0.1:[port number] and you should be able to see the homepage.
+7. Copy all the files from the `cs2102-tasksourcing` folder to the parent and remove this folder.
+8. Enter http://<i></i>127.0.0.1:[port number] and you should be able to see the homepage.
 
 ## Notes
 * This guide uses /opt/bitnami to refer to the installation directory for the Bitnami Stack. This is the default installation directory for Bitnami Cloud Hosting, Google Cloud Platform and Microsoft Azure servers and for virtual servers. If you're using a native installer and have installed the Bitnami Stack to a different folder, replace /opt/bitnami in the examples below with your actual installation directory.   
