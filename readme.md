@@ -104,3 +104,9 @@ The system is a catalog of tasks submitted by users. Users can either submit a t
 * <b>[Default port number]</b>  
   Windows: 80  
   Mac OS X and Linux: 8080
+
+## Errors
+| Error | How to fix |
+|:----- | :----- |
+| FatalErrorException</b> in ProviderRepository.php ... Class 'Collective\Html\HtmlServiceProvider' not found | 1. Install composer: https://getcomposer.org/doc/00-intro.md<br>2. Open your command prompt -> cd to the laravel folder -> Execute `composer update` |
+ 
