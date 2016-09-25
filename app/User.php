@@ -44,6 +44,27 @@ class User extends Authenticatable
     return true;
   }
 
+  public static function find($key)
+  {
+    try {
+      $query = \DB::select("SELECT * FROM users WHERE id = :id",
+      [
+        'id' => $key,
+      ]);
+      $user = new User();
+      $user->id = $query[0]->id;
+      $user->username = $query[0]->username;
+      $user->email = $query[0]->email;
+      $user->first_name = $query[0]->first_name;
+      $user->last_name = $query[0]->last_name;
+      $user->reputation = $query[0]->reputation;
+    } catch(QueryException $e) {
+      return false;
+    }
+
+    return $user;
+  }
+
   public static $createValidationRules = [
     'username' => 'required|unique:users|min:5',
     'email' => 'required|email|unique:users',
