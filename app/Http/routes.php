@@ -16,7 +16,7 @@ Route::get('home', ['as' => 'home', 'uses' => 'HomeController@index']);
 Route::get('login', ['as' => 'login', 'uses' => 'AuthController@getLogin']);
 Route::post('handleLogin', ['as' => 'handleLogin', 'uses' => 'AuthController@handleLogin']);
 Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
-Route::resource('users', 'UsersController', ['only' => ['create', 'store']]);
+Route::resource('users', 'UsersController', ['only' => ['create', 'store', 'edit', 'update']]);
 
 Route::get('books.json', function () {
   dd(\Auth::check());
