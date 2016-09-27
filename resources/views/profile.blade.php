@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - TaskHopper</title>
+  <title>Profile - TaskHopper</title>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/semantic.min.css') }}">
 
   <style type="text/css">
@@ -184,6 +184,12 @@
 
           <div class="ui hidden divider"></div>
 
+          <div class="ui big label">
+            {{ $user->username }}
+          </div>
+
+          <div class="ui hidden divider"></div>
+
           <div class="ui label teal">
             <i class="smile icon"></i> Reputation {{ $user->reputation }}
           </div>
@@ -191,16 +197,12 @@
         <div class="eight wide column">
           <h2>Edit Profile</h2>
           {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT', 'class' => 'ui form')) }}
-          <div class="field">
-            {{ Form::label('username', 'Username') }}
-            {{ Form::text('username', null, array('placeholder' => 'Username')) }}
-          </div>
 
           <div class="field">
             <label>Name</label>
             <div class="two fields">
               <div class="field">
-                {{ Form::text('first_name', null, array('placeholder' => 'First Name')) }}
+                {{ Form::text('first_name', $value = null, array('placeholder' => 'First Name')) }}
               </div>
               <div class="field">
                 {{ Form::text('last_name', null, array('placeholder' => 'Last Name')) }}
@@ -209,11 +211,41 @@
           </div>
 
           <div class="field">
+            {{ Form::label('bio', 'Bio') }}
+            {{ Form::textarea('bio', null, array('rows' => '2')) }}
+          </div>
+
+          <div class="field">
             {{ Form::label('email', 'Email') }}
             {{ Form::text('email', null, array('placeholder' => 'Email')) }}
           </div>
 
+          <div class="field">
+            {{ Form::label('password', 'Password') }}
+            {{ Form::password('password', null, array('placeholder' => 'Password')) }}
+          </div>
+
+          <div class="field">
+            {{ Form::label('password_confirm', 'Confirm password') }}
+            {{ Form::password('password_confirm', null, array('placeholder' => 'Confirm Password')) }}
+          </div>
+
           {!! Form::submit('Save', array('class' => 'ui large teal submit button')) !!}
+
+          @if(count($errors))
+          <div class="ui hidden divider"></div>
+
+          <div class="ui form error">
+            <div class="ui error message">
+              <ul class="list">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
+          @endif
+
           {{ Form::close() }}
         </div>
       </div>
