@@ -35,7 +35,34 @@ class User extends Authenticatable
         'email' => $data['email'],
         'password' => $data['password'],
         'created_at' => $data['created_at'],
-        'updated_at' => $data['updated_at']
+        'updated_at' => $data['updated_at'],
+        'first_name' => $data['first_name'],
+        'last_name' => $data['last_name'],
+        'bio' => $data['bio']
+      ]);
+    } catch(QueryException $e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public function save(array $data = array(), array $options = array())
+  {
+    try {
+      \DB::update("UPDATE users
+        SET email = :email,
+            first_name = :first_name,
+            last_name = :last_name,
+            bio = :bio,
+            updated_at = :updated_at WHERE id = :id",
+      [
+        'id' => $this->id,
+        'email' => $this->email,
+        'first_name' => $this->first_name,
+        'last_name' => $this->last_name,
+        'bio' => $this->bio,
+        'updated_at' => new \DateTime()
       ]);
     } catch(QueryException $e) {
       return false;
@@ -58,6 +85,7 @@ class User extends Authenticatable
       $user->first_name = $query[0]->first_name;
       $user->last_name = $query[0]->last_name;
       $user->reputation = $query[0]->reputation;
+      $user->bio = $query[0]->bio;
     } catch(QueryException $e) {
       return false;
     }
@@ -66,13 +94,15 @@ class User extends Authenticatable
   }
 
   public static $createValidationRules = [
-    'username' => 'required|unique:users|min:5',
-    'email' => 'required|email|unique:users',
-    'password' => 'required|min:7'
+    'username' => 'required|unique:users|min:5|max:12',
+    'email' => 'required|email|Between:3,64|unique:users',
+    'password' => 'required|min:7',
+    'password_confirm' => 'required|same:password'
   ];
 
   public static $loginValidationRules = [
     'email' => 'required|email|exists:users',
     'password' => 'required|min:7'
   ];
+
 }
