@@ -33,9 +33,8 @@
   <div class="ui middle aligned center aligned grid">
     <div class="column">
       <h2 class="ui teal image header">
-        <img src="assets/images/logo.png" class="image">
         <div class="content">
-          Log In to your account
+           <i class="user icon"></i> Log In to your account
         </div>
       </h2>
       {!! Form::open(array('route' => 'handleLogin', 'class' => 'ui form')) !!}
