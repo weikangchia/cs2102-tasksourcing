@@ -35,10 +35,7 @@ class User extends Authenticatable
         'email' => $data['email'],
         'password' => $data['password'],
         'created_at' => $data['created_at'],
-        'updated_at' => $data['updated_at'],
-        'first_name' => $data['first_name'],
-        'last_name' => $data['last_name'],
-        'bio' => $data['bio']
+        'updated_at' => $data['updated_at']
       ]);
     } catch(QueryException $e) {
       return false;
