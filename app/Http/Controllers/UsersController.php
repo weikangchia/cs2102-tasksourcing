@@ -136,7 +136,7 @@ class UsersController extends Controller
        $this->validate($request, $required);
 
        $user->save();
-       
+
        return redirect()->route('users.edit', $user->id);
      }
 
