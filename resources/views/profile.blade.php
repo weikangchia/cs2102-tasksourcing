@@ -7,8 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - TaskHopper</title>
-  <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+  <title>Profile - TaskHopper</title>
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/semantic.min.css') }}">
 
   <style type="text/css">
 
@@ -17,7 +17,6 @@
   }
 
   .masthead.segment {
-    min-height: 700px;
     padding: 1em 0em;
   }
   .masthead .logo.item img {
@@ -85,7 +84,6 @@
       display: block;
     }
     .masthead.segment {
-      min-height: 350px;
     }
     .masthead h1.ui.header {
       font-size: 2em;
@@ -98,8 +96,8 @@
   }
   </style>
 
-  <script src="js/jquery.min.js"></script>
-  <script src="js/semantic.min.js"></script>
+  <script src="{{ asset('js/jquery.min.js') }}"></script>
+  <script src="{{ asset('js/semantic.min.js') }}"></script>
   <script>
   $(document).ready(function() {
     // fix menu when passed
@@ -123,12 +121,12 @@
   <!-- Following Menu -->
   <div class="ui large top fixed hidden menu">
     <div class="ui container">
-      <a class="active item">Home</a>
+      <a class="active item">Profile</a>
       <div class="right menu">
-        @if(Auth::check())
         <div class="item">
-          {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui button')) }}
+          {{ link_to_route('home', 'Home', '', array('class' => 'ui button')) }}
         </div>
+        @if(Auth::check())
         <div class="item">
           {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui button')) }}
         </div>
@@ -146,9 +144,9 @@
 
   <!-- Sidebar Menu -->
   <div class="ui vertical inverted sidebar menu">
-    <a class="active item">Home</a>
+    {{ link_to_route('home', 'Home', '', array('class' => 'item')) }}
     @if(Auth::check())
-    {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'item')) }}
+    {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'active item')) }}
     {{ link_to_route('logout', 'Log Out', '', array('class' => 'item')) }}
     @else
     {{ link_to_route('login', 'Log In', '', array('class' => 'item')) }}
@@ -165,10 +163,10 @@
           <a class="toc item">
             <i class="sidebar icon"></i>
           </a>
-          <a class="active item">Home</a>
+          <a class="active item">Profile</a>
           <div class="right item">
+            {{ link_to_route('home', 'Home', '', array('class' => 'ui inverted button')) }}
             @if(Auth::check())
-            {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui inverted button')) }}
             {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui inverted button')) }}
             @else
             {{ link_to_route('login', 'Log In', '', array('class' => 'ui inverted button')) }}
@@ -177,86 +175,86 @@
           </div>
         </div>
       </div>
-
-      <div class="ui text container">
-        <h1 class="ui inverted header">
-          TaskHopper
-        </h1>
-        <h2>We do chores.<br/>
-          You live life.
-        </h2>
-        <div class="ui hidden divider"></div>
-        <div class="ui icon input">
-          <input type="text" placeholder="Search...">
-          <i class="inverted circular search link icon"></i>
-        </div>
-      </div>
     </div>
 
     <div class="ui vertical stripe segment">
-      <div class="doubling stackable three column ui grid container">
-        <div class="row centered">
-          <h1 class="ui center aligned header">Put TaskHopper to Work</h1>
-        </div>
-        @foreach($categories as $category)
-          <div class="column">
-            <div class="ui fluid card">
-              <div class="image">
-                <img class="img mini" src="img/photogenic-task-rabbit.jpg">
-              </div>
-              <div class="content">
-                <div class="header">{{ $category->name }}</div>
-                <div class="description">
-                  {{ $category->description }}
-                </div>
-              </div>
-              <div class="ui bottom attached button">
-                Book
-              </div>
-            </div>
-          </div>
-        @endforeach
-      </div>
-    </div>
+      <div class="doubling stackable ui grid container">
+        <div class="four wide column center aligned">
+          @if($user->profile_photo == '')
+          <img class="ui small circular image centered" src="{{ asset('img/square-image.png') }}">
+          @else
+          <img class="ui small circular image centered" src="{{ asset('img/users/'.$user->profile_photo) }}">
+          @endif
+          <div class="ui hidden divider"></div>
 
-    <div class="ui vertical stripe segment">
-      <div class="ui stackable grid container">
-        <div class="row centered">
-          <h1 class="ui center aligned header">How it Works?</h1>
+          <div class="ui big label blue">
+            {{ $user->username }}
+          </div>
         </div>
-        <div class="row">
-          <div class="column center aligned">
-            <div class="ui four steps">
-              <div class="step">
-                <i class="write icon"></i>
-                <div class="content">
-                  <div class="title left aligned">Create a Task</div>
-                  <div class="description">Create your task under the above category.</div>
-                </div>
+        <div class="ten wide column">
+          <h2>Edit Profile</h2>
+          <p><small>Joined TaskHopper @ {{ date('M d, Y', strtotime($user->created_at)) }}</small><p>
+          <div class="ui label teal">
+            <i class="smile icon"></i> Reputation {{ $user->reputation }}
+          </div>
+
+          <div class="ui hidden divider"></div>
+
+          {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT', 'class' => 'ui form', 'files' => true)) }}
+          <div class="field">
+            <label>Name</label>
+            <div class="two fields">
+              <div class="field">
+                {{ Form::text('first_name', $value = null, array('placeholder' => 'First Name')) }}
               </div>
-              <div class="step">
-                <i class="users icon"></i>
-                <div class="content">
-                  <div class="title">Task in Bidding</div>
-                  <div class="description">Interested Taskers around you will bid for your task.</div>
-                </div>
-              </div>
-              <div class="step">
-                <i class="hand pointer icon"></i>
-                <div class="content">
-                  <div class="title left aligned">Select your Tasker</div>
-                  <div class="description">Choose your Tasker based on bid price and reputation.</div>
-                </div>
-              </div>
-              <div class="disabled step">
-                <i class="info icon"></i>
-                <div class="content">
-                  <div class="title">Task Complete</div>
-                  <div class="description">Your Tasker arrives, completes the job.</div>
-                </div>
+              <div class="field">
+                {{ Form::text('last_name', null, array('placeholder' => 'Last Name')) }}
               </div>
             </div>
           </div>
+
+          <div class="field">
+            {{ Form::label('profile_photo', 'Profile photo') }}
+            {{ Form::file('profile_photo', array('accept' => '.jpeg,.jpg,.png')) }}
+          </div>
+
+          <div class="field">
+            {{ Form::label('bio', 'Bio') }}
+            {{ Form::textarea('bio', null, array('rows' => '2')) }}
+          </div>
+
+          <div class="field">
+            {{ Form::label('email', 'Email') }}
+            {{ Form::text('email', null, array('placeholder' => 'Email')) }}
+          </div>
+
+          <div class="field">
+            {{ Form::label('password', 'Password') }}
+            {{ Form::password('password', null, array('placeholder' => 'Password')) }}
+          </div>
+
+          <div class="field">
+            {{ Form::label('password_confirm', 'Confirm password') }}
+            {{ Form::password('password_confirm', null, array('placeholder' => 'Confirm Password')) }}
+          </div>
+
+          {!! Form::submit('Save', array('class' => 'ui large teal submit button')) !!}
+
+          @if(count($errors))
+          <div class="ui hidden divider"></div>
+
+          <div class="ui form error">
+            <div class="ui error message">
+              <ul class="list">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
+          @endif
+
+          {{ Form::close() }}
         </div>
       </div>
     </div>
@@ -271,5 +269,4 @@
   </div>
 
 </body>
-
 </html>

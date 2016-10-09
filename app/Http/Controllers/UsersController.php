@@ -76,7 +76,9 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+
+        return view('profile')->with('user', $user);
     }
 
     /**
@@ -86,10 +88,70 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+     public function update(Request $request, $id)
+     {
+       $optional = [
+         'email'            => 'email|unique:users',
+         'password'         => 'min:7',
+         'password_confirm' => 'same:password',
+         'first_name'       => 'min:3|max:32',
+         'last_name'        => 'min:3|max:32',
+         'bio'              => 'max:120',
+         'profile_photo'    => 'mimes:jpeg,jpg,png'
+       ];
+
+       $user = User::find($id);
+       $required = [];
+
+       if(strcmp($request->email, $user->email) != 0)
+       {
+         $required['email'] = $optional['email'];
+         $user->email = $request->email;
+       }
+
+       if($request->first_name != '')
+       {
+         $required['first_name'] = $optional['first_name'];
+         $user->first_name = $request->first_name;
+       }
+
+       if($request->last_name != '')
+       {
+         $required['last_name'] = $optional['last_name'];
+         $user->last_name = $request->last_name;
+       }
+
+       if($request->bio != '')
+       {
+         $required['bio'] = $optional['bio'];
+         $user->bio = $request->bio;
+       }
+
+       if($request->password != '')
+       {
+         $user->dirty_password = bcrypt($request->password);
+         $required['password'] = $optional['password'];
+         $required['password_confirm'] = $optional['password_confirm'];
+       }
+
+       if($request->profile_photo != '')
+       {
+         $required['profile_photo'] = $optional['profile_photo'];
+       }
+
+       $this->validate($request, $required);
+
+       if($request->profile_photo != '')
+       {
+         $profile_img_name = $user->id . '.' . $request->file('profile_photo')->getClientOriginalExtension();
+         $request->file('profile_photo')->move(base_path() . '/public/img/users/', $profile_img_name);
+         $user->profile_photo = $profile_img_name;
+       }
+
+       $user->save();
+
+       return redirect()->route('users.edit', $user->id);
+     }
 
     /**
      * Remove the specified resource from storage.

@@ -64,6 +64,12 @@
             {!! Form::password('password', array('placeholder' => 'Password')) !!}
           </div>
         </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            {!! Form::password('password_confirm', array('placeholder' => 'Confirm password')) !!}
+          </div>
+        </div>
         {!! Form::token() !!}
         {!! Form::submit('Sign Up', array('class' => 'ui fluid large teal submit button')) !!}
       </div>

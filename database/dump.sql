@@ -20,26 +20,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: book; Type: TABLE; Schema: public; Owner: forge
---
-
-CREATE TABLE book (
-    title character varying(256) NOT NULL,
-    format character(9),
-    pages integer,
-    language character varying(32),
-    authors character varying(256),
-    publisher character varying(64),
-    year date,
-    isbn10 character(10) NOT NULL,
-    isbn13 character(14) NOT NULL,
-    CONSTRAINT book_format_check CHECK (((format = 'paperback'::bpchar) OR (format = 'hardcover'::bpchar)))
-);
-
-
-ALTER TABLE book OWNER TO forge;
-
---
 -- Name: category; Type: TABLE; Schema: public; Owner: forge
 --
 
@@ -80,19 +60,19 @@ ALTER SEQUENCE category_id_seq OWNED BY category.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    username character varying(120) NOT NULL,
+    username character varying(16) NOT NULL,
     email character varying(120) NOT NULL,
-    password character varying(120) NOT NULL,
-    first_name character varying(64),
-    last_name character varying(64),
-    role character varying(5) DEFAULT 'user'::character varying NOT NULL,
+    password character varying(64) NOT NULL,
+    first_name character varying(32),
+    last_name character varying(32),
     avatar character varying(120),
     reputation integer DEFAULT 0 NOT NULL,
     created_at date NOT NULL,
     bio character varying(120),
     remember_token character varying(120),
     updated_at date,
-    CONSTRAINT users_role_check CHECK ((((role)::text = 'admin'::text) OR ((role)::text = 'user'::text)))
+    role integer NOT NULL,
+    CONSTRAINT users_len_username CHECK ((length((username)::text) >= 5))
 );
 
 
@@ -203,22 +183,6 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('member_uid_seq'::reg
 
 
 --
--- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: forge
---
-
-COPY book (title, format, pages, language, authors, publisher, year, isbn10, isbn13) FROM stdin;
-Photoshop Elements 9: The Missing Manual	paperback	640	English	Barbara Brundage	Pogue Press	2012-09-10	1449389678	978-1449389673
-Where Good Ideas Come From: The Natural History of Innovation	hardcover	336	English	Steven Johnson	Riverhead Hardcover	2010-01-01	1594487715	978-1594487712
-The Digital Photography Book	paperback	219	English	Scott Kelby	Peachpit Press	2006-01-01	032147404X	978-0321474049
-The Great Gatsby	hardcover	216	English	F. Scott Fitzgerald	Scribner	1995-01-01	0684801523	978-0684801520
-Davis s Drug Guide For Nurses (book With Cd-rom) And Mednotes: Nurse s Pocket Pharmacology Guide	hardcover	182	English	Judith Hopfer Deglin, April Hazard Vallerand	F. A. Davis Company	2004-05-06	0803612257	978-0803612259
-Microsoft Office 2007: Introductory Concepts and Techniques, Premium Video Edition (Book Only)	paperback	1368	English	Gary B. Shelly, Thomas J. Cashman, Misty E. Vermaat	Course Technology	2010-09-09	1111529027	978-1111529024
-The Future of Learning Institutions in a Digital Age (John D. and Catherine T. MacArthur Foundation Reports on Digital Media and Learning)	paperback	81	English	Cathy N. Davidson, David Theo Goldberg	The MIT Press 	2009-01-01	0262513595	978-0262513593
-The New Rules of Marketing and PR: How to Use Social Media, Blogs, News Releases, Online Video, and Viral Marketing to Reach Buyers Directly, 2nd Edition	paperback	320	English	David Meerman Scott	Wiley	2010-10-02	0470547812	978-0470547816
-\.
-
-
---
 -- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: forge
 --
 
@@ -241,7 +205,7 @@ SELECT pg_catalog.setval('category_id_seq', 4, true);
 -- Name: member_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
 --
 
-SELECT pg_catalog.setval('member_uid_seq', 37, true);
+SELECT pg_catalog.setval('member_uid_seq', 45, true);
 
 
 --
@@ -274,28 +238,14 @@ SELECT pg_catalog.setval('task_task_id_seq', 4, true);
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: forge
 --
 
-COPY users (id, username, email, password, first_name, last_name, role, avatar, reputation, created_at, bio, remember_token, updated_at) FROM stdin;
-11	weikangchia	weikangchia@mailinator.com	$2y$10$fsVRL3kQELehItkhsfKsR.cFYj10Aclh7xYYX9Lvf3DUVRPuu53CW	\N	\N	user	\N	0	2016-09-22	\N	\N	2016-09-22
-12	david	david@mailinator.com	$2y$10$2rgA.b551n8Dj4Jmh3HtfOWJgr/xsep81d.lH4l03KUu9hAHnM3Hu	\N	\N	user	\N	0	2016-09-22	\N	\N	2016-09-22
-13	admin	admin@mailinator.com	$2y$10$gMEsy4Qz3/fKJPiPNeRdUehhZL7mKjhcrMEYcEGbEei4fDSjlYF26	\N	\N	admin	\N	0	2016-09-22	\N	ICMDDR8q85dE0BOMYvcU116rIyoJvxv1G2cSnLSO6amcvAe59DFrpB9fOvU1	2016-09-22
-37	jacky	jacky@mailinator.com	$2y$10$bd7zfeucrFgQW.z41XACZe9jUXhZ8TlYQvU2pPOR5b4zStZ4nqS6C	\N	\N	user	\N	0	2016-09-22	\N	MnvzdiErFY52RnUPZaQxO4VwONH1MT8386ax5PEqYkWP7HwIxUq6s2gthFwA	2016-09-22
+COPY users (id, username, email, password, first_name, last_name, avatar, reputation, created_at, bio, remember_token, updated_at, role) FROM stdin;
+12	david	david@mailinator.com	$2y$10$2rgA.b551n8Dj4Jmh3HtfOWJgr/xsep81d.lH4l03KUu9hAHnM3Hu	\N	\N	\N	0	2016-09-22	\N	\N	2016-09-22	0
+37	jacky	jacky@mailinator.com	$2y$10$bd7zfeucrFgQW.z41XACZe9jUXhZ8TlYQvU2pPOR5b4zStZ4nqS6C	\N	\N	\N	0	2016-09-22	\N	MnvzdiErFY52RnUPZaQxO4VwONH1MT8386ax5PEqYkWP7HwIxUq6s2gthFwA	2016-09-22	0
+38	weihan	weihan@mailinator.com	$2y$10$DAnRSCC5YQ2byDfM4mXbPOrpyqv7hZgVxkpQzvPItqEIAyumlvvMO	Wei Han	Chia	\N	0	2016-09-27	I am very helpful.	\N	2016-09-27	0
+13	admin	admin@mailinator.com	$2y$10$gMEsy4Qz3/fKJPiPNeRdUehhZL7mKjhcrMEYcEGbEei4fDSjlYF26	\N	\N	\N	0	2016-09-22	\N	ICMDDR8q85dE0BOMYvcU116rIyoJvxv1G2cSnLSO6amcvAe59DFrpB9fOvU1	2016-09-22	1
+11	weikangchia	weikangchia@mailinator.com	$2y$10$fsVRL3kQELehItkhsfKsR.cFYj10Aclh7xYYX9Lvf3DUVRPuu53CW	Wei Kang	Chia	\N	0	2016-09-22	\N	40jGHBbsIbigHKuBTmqMoUBFrDItjpN7ZNuNJdKtoZ2AWozKDgPX7XQe76Z0	2016-10-07	0
+45	mary.lim	mary.lim@mailinator.com	$2y$10$aOmTOXnr0cY9pq84GzbQqejsKnmAu.EO/XbVh6ORH9tapiVxY1k2S	Mary	Lim	\N	0	2016-10-07	Hi. I am a helpful person.	\N	2016-10-07	0
 \.
-
-
---
--- Name: book_isbn10_key; Type: CONSTRAINT; Schema: public; Owner: forge
---
-
-ALTER TABLE ONLY book
-    ADD CONSTRAINT book_isbn10_key UNIQUE (isbn10);
-
-
---
--- Name: book_pkey; Type: CONSTRAINT; Schema: public; Owner: forge
---
-
-ALTER TABLE ONLY book
-    ADD CONSTRAINT book_pkey PRIMARY KEY (isbn13);
 
 
 --
