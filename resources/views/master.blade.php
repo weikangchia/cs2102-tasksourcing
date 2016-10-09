@@ -7,8 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - TaskHopper</title>
-  <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+  <title>TaskHopper - @yield('title')</title>
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/semantic.min.css') }}">
 
   <style type="text/css">
 
@@ -17,7 +17,6 @@
   }
 
   .masthead.segment {
-    min-height: 700px;
     padding: 1em 0em;
   }
   .masthead .logo.item img {
@@ -85,7 +84,6 @@
       display: block;
     }
     .masthead.segment {
-      min-height: 350px;
     }
     .masthead h1.ui.header {
       font-size: 2em;
@@ -98,8 +96,8 @@
   }
   </style>
 
-  <script src="js/jquery.min.js"></script>
-  <script src="js/semantic.min.js"></script>
+  <script src="{{ asset('js/jquery.min.js') }}"></script>
+  <script src="{{ asset('js/semantic.min.js') }}"></script>
   <script>
   $(document).ready(function() {
     // fix menu when passed
@@ -123,11 +121,14 @@
   <!-- Following Menu -->
   <div class="ui large top fixed hidden menu">
     <div class="ui container">
-      <a class="active item">Home</a>
+      <a class="active item">Profile</a>
       <div class="right menu">
+        <div class="item">
+          {{ link_to_route('home', 'Home', '', array('class' => 'ui button')) }}
+        </div>
         @if(Auth::check())
         <div class="item">
-          {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui button')) }}
+          {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui button')) }}
         </div>
         <div class="item">
           {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui button')) }}
@@ -146,8 +147,9 @@
 
   <!-- Sidebar Menu -->
   <div class="ui vertical inverted sidebar menu">
-    <a class="active item">Home</a>
+    {{ link_to_route('home', 'Home', '', array('class' => 'item')) }}
     @if(Auth::check())
+    {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'item')) }}
     {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'item')) }}
     {{ link_to_route('logout', 'Log Out', '', array('class' => 'item')) }}
     @else
@@ -159,17 +161,16 @@
   <!-- Page Contents -->
   <div class="pusher">
     <div class="ui inverted vertical masthead center aligned segment">
-
       <div class="ui container">
         <div class="ui large secondary inverted pointing menu">
           <a class="toc item">
             <i class="sidebar icon"></i>
           </a>
-          <a class="active item">Home</a>
+          @yield('sidebar-active-item')
           <div class="right item">
+            {{ link_to_route('home', 'Home', '', array('class' => 'ui inverted button')) }}
             @if(Auth::check())
-            {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui inverted button'))}}
-            {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui inverted button')) }}
+            {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui inverted button')) }}
             {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui inverted button')) }}
             @else
             {{ link_to_route('login', 'Log In', '', array('class' => 'ui inverted button')) }}
@@ -178,89 +179,9 @@
           </div>
         </div>
       </div>
-
-      <div class="ui text container">
-        <h1 class="ui inverted header">
-          TaskHopper
-        </h1>
-        <h2>We do chores.<br/>
-          You live life.
-        </h2>
-        <div class="ui hidden divider"></div>
-        <div class="ui icon input">
-          <input type="text" placeholder="Search...">
-          <i class="inverted circular search link icon"></i>
-        </div>
-      </div>
     </div>
 
-    <div class="ui vertical stripe segment">
-      <div class="doubling stackable three column ui grid container">
-        <div class="row centered">
-          <h1 class="ui center aligned header">Put TaskHopper to Work</h1>
-        </div>
-        @foreach($categories as $category)
-          <div class="column">
-            <div class="ui fluid card">
-              <div class="image">
-                <img class="img mini" src="img/photogenic-task-rabbit.jpg">
-              </div>
-              <div class="content">
-                <div class="header">{{ $category->name }}</div>
-                <div class="description">
-                  {{ $category->description }}
-                </div>
-              </div>
-              <div class="ui bottom attached button">
-                Book
-              </div>
-            </div>
-          </div>
-        @endforeach
-      </div>
-    </div>
-
-    <div class="ui vertical stripe segment">
-      <div class="ui stackable grid container">
-        <div class="row centered">
-          <h1 class="ui center aligned header">How it Works?</h1>
-        </div>
-        <div class="row">
-          <div class="column center aligned">
-            <div class="ui four steps">
-              <div class="step">
-                <i class="write icon"></i>
-                <div class="content">
-                  <div class="title left aligned">Create a Task</div>
-                  <div class="description">Create your task under the above category.</div>
-                </div>
-              </div>
-              <div class="step">
-                <i class="users icon"></i>
-                <div class="content">
-                  <div class="title">Task in Bidding</div>
-                  <div class="description">Interested Taskers around you will bid for your task.</div>
-                </div>
-              </div>
-              <div class="step">
-                <i class="hand pointer icon"></i>
-                <div class="content">
-                  <div class="title left aligned">Select your Tasker</div>
-                  <div class="description">Choose your Tasker based on bid price and reputation.</div>
-                </div>
-              </div>
-              <div class="disabled step">
-                <i class="info icon"></i>
-                <div class="content">
-                  <div class="title">Task Complete</div>
-                  <div class="description">Your Tasker arrives, completes the job.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    @yield('content')
 
     <div class="ui inverted vertical footer segment">
       <div class="ui container grid centered">
@@ -272,5 +193,4 @@
   </div>
 
 </body>
-
 </html>
