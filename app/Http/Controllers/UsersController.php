@@ -91,12 +91,13 @@ class UsersController extends Controller
      public function update(Request $request, $id)
      {
        $optional = [
-         'email' => 'email|unique:users',
-         'password' => 'min:7',
+         'email'            => 'email|unique:users',
+         'password'         => 'min:7',
          'password_confirm' => 'same:password',
-         'first_name' => 'min:3|max:32',
-         'last_name' => 'min:3|max:32',
-         'bio' => 'max:120'
+         'first_name'       => 'min:3|max:32',
+         'last_name'        => 'min:3|max:32',
+         'bio'              => 'max:120',
+         'profile_photo'    => 'mimes:jpeg,jpg,png'
        ];
 
        $user = User::find($id);
@@ -133,7 +134,19 @@ class UsersController extends Controller
          $required['password_confirm'] = $optional['password_confirm'];
        }
 
+       if($request->profile_photo != '')
+       {
+         $required['profile_photo'] = $optional['profile_photo'];
+       }
+
        $this->validate($request, $required);
+
+       if($request->profile_photo != '')
+       {
+         $profile_img_name = $user->id . '.' . $request->file('profile_photo')->getClientOriginalExtension();
+         $request->file('profile_photo')->move(base_path() . '/public/img/users/', $profile_img_name);
+         $user->profile_photo = $profile_img_name;
+       }
 
        $user->save();
 

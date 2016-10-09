@@ -180,24 +180,27 @@
     <div class="ui vertical stripe segment">
       <div class="doubling stackable ui grid container">
         <div class="four wide column center aligned">
+          @if($user->profile_photo == '')
           <img class="ui small circular image centered" src="{{ asset('img/square-image.png') }}">
-
+          @else
+          <img class="ui small circular image centered" src="{{ asset('img/users/'.$user->profile_photo) }}">
+          @endif
           <div class="ui hidden divider"></div>
 
-          <div class="ui big label">
+          <div class="ui big label blue">
             {{ $user->username }}
           </div>
-
-          <div class="ui hidden divider"></div>
-
+        </div>
+        <div class="ten wide column">
+          <h2>Edit Profile</h2>
+          <p><small>Joined TaskHopper @ {{ date('M d, Y', strtotime($user->created_at)) }}</small><p>
           <div class="ui label teal">
             <i class="smile icon"></i> Reputation {{ $user->reputation }}
           </div>
-        </div>
-        <div class="eight wide column">
-          <h2>Edit Profile</h2>
-          {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT', 'class' => 'ui form')) }}
 
+          <div class="ui hidden divider"></div>
+
+          {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT', 'class' => 'ui form', 'files' => true)) }}
           <div class="field">
             <label>Name</label>
             <div class="two fields">
@@ -208,6 +211,11 @@
                 {{ Form::text('last_name', null, array('placeholder' => 'Last Name')) }}
               </div>
             </div>
+          </div>
+
+          <div class="field">
+            {{ Form::label('profile_photo', 'Profile photo') }}
+            {{ Form::file('profile_photo', array('accept' => '.jpeg,.jpg,.png')) }}
           </div>
 
           <div class="field">
