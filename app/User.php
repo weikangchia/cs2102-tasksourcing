@@ -55,6 +55,7 @@ class User extends Authenticatable
             first_name = :first_name,
             last_name = :last_name,
             bio = :bio,
+            profile_photo = :profile_photo,
             updated_at = :updated_at WHERE id = :id",
       [
         'id' => $this->id,
@@ -62,6 +63,7 @@ class User extends Authenticatable
         'first_name' => $this->first_name,
         'last_name' => $this->last_name,
         'bio' => $this->bio,
+        'profile_photo' => $this->profile_photo,
         'updated_at' => new \DateTime()
       ]);
     } catch(QueryException $e) {
@@ -86,6 +88,8 @@ class User extends Authenticatable
       $user->first_name = $query[0]->first_name;
       $user->last_name = $query[0]->last_name;
       $user->reputation = $query[0]->reputation;
+      $user->created_at = $query[0]->created_at;
+      $user->profile_photo = $query[0]->profile_photo;
       $user->bio = $query[0]->bio;
     } catch(QueryException $e) {
       return false;
