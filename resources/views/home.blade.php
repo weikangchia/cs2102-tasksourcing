@@ -187,10 +187,7 @@
           You live life.
         </h2>
         <div class="ui hidden divider"></div>
-        <div class="ui icon input">
-          <input type="text" placeholder="Search...">
-          <i class="inverted circular search link icon"></i>
-        </div>
+        {{ link_to_route('tasks.index', 'Get Started', '', array('class' => 'ui inverted button large'))}}
       </div>
     </div>
 
@@ -203,7 +200,7 @@
           <div class="column">
             <div class="ui fluid card">
               <div class="image">
-                <img class="img mini" src="img/photogenic-task-rabbit.jpg">
+                <img class="img mini" src="{{ asset('img/category/'.$category->category_photo) }}">
               </div>
               <div class="content">
                 <div class="header">{{ $category->name }}</div>
