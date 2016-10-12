@@ -19,19 +19,22 @@
                 <th>Posted by</th>
               </tr></thead>
               <tbody>
+                @foreach($tasks as $task)
                 <tr class="top aligned">
-                  <td>{{ $task->name }}</td>
-                  <td>{!! $task->description !!}</td>
-                  <td>{{ $task->category }}</td>
+                  <td>{{ $task->task_name }}</td>
+                  <td>Location: {{ $task->location }}<br><br>{!! $task->task_description !!}</td>
+                  <td>{{ $task->category_name }}</td>
                   <td>
                     <h4 class="ui image header">
-                      <img src="{{ asset('img/users/'.$task->posted_by_url) }}" class="ui mini avatar image">
+                      <img src="{{ asset('img/users/'.$task->profile_photo) }}" class="ui mini avatar image">
                       <div class="content">
-                        {{ $task->posted_by }}
+                        {{ $task->username }}
+                        <div class="sub header">{{ $task->reputation }}</div>
                       </div>
                     </h4>
                   </td>
                 </tr>
+                @endforeach
               </tbody>
               <tfoot>
                 <tr><th colspan="5">
