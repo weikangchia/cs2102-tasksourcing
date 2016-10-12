@@ -27,7 +27,7 @@ CREATE TABLE category (
     id integer NOT NULL,
     name character varying(64) NOT NULL,
     description character varying(120) NOT NULL,
-    avartar character varying(120)
+    category_photo character varying(120)
 );
 
 
@@ -65,7 +65,7 @@ CREATE TABLE users (
     password character varying(64) NOT NULL,
     first_name character varying(32),
     last_name character varying(32),
-    avatar character varying(120),
+    profile_photo character varying(120),
     reputation integer DEFAULT 0 NOT NULL,
     created_at date NOT NULL,
     bio character varying(120),
@@ -104,9 +104,19 @@ ALTER SEQUENCE member_uid_seq OWNED BY users.id;
 --
 
 CREATE TABLE task (
-    task_id bigint NOT NULL,
-    name character varying(255) NOT NULL,
-    category character varying(255)
+    id integer NOT NULL,
+    name character varying(64) NOT NULL,
+    postal_code integer,
+    description character varying(255),
+    created_at date,
+    updated_at date,
+    start_date date,
+    start_time time without time zone,
+    cash_value double precision,
+    duration integer,
+    category integer,
+    posted_by integer,
+    location character varying(120)
 );
 
 
@@ -151,7 +161,7 @@ ALTER TABLE task_task_id_seq OWNER TO forge;
 -- Name: task_task_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: forge
 --
 
-ALTER SEQUENCE task_task_id_seq OWNED BY task.task_id;
+ALTER SEQUENCE task_task_id_seq OWNED BY task.id;
 
 
 --
@@ -162,17 +172,10 @@ ALTER TABLE ONLY category ALTER COLUMN id SET DEFAULT nextval('category_id_seq':
 
 
 --
--- Name: task_id; Type: DEFAULT; Schema: public; Owner: forge
+-- Name: id; Type: DEFAULT; Schema: public; Owner: forge
 --
 
-ALTER TABLE ONLY task ALTER COLUMN task_id SET DEFAULT nextval('task_task_id_seq'::regclass);
-
-
---
--- Name: name; Type: DEFAULT; Schema: public; Owner: forge
---
-
-ALTER TABLE ONLY task ALTER COLUMN name SET DEFAULT nextval('task_name_seq'::regclass);
+ALTER TABLE ONLY task ALTER COLUMN id SET DEFAULT nextval('task_task_id_seq'::regclass);
 
 
 --
@@ -186,11 +189,11 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('member_uid_seq'::reg
 -- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: forge
 --
 
-COPY category (id, name, description, avartar) FROM stdin;
-3	Cleaning	House cleaning, office cleaning, spring cleaning and etc.	\N
-4	Fix Stuff	Furniture assembly, appliance repair, TV mounting and installation and etc.	\N
-2	Delivery and Removals	Furniture delivery, food Delivery, fridge moving and removal etc.	\N
-1	Everything Else	Event help, queue line up, and anything that doesn't fit into either category.	\N
+COPY category (id, name, description, category_photo) FROM stdin;
+3	Cleaning	House cleaning, office cleaning, spring cleaning and etc.	cleaning.jpg
+4	Fix Stuff	Furniture assembly, appliance repair, TV mounting and installation and etc.	fix_stuff.jpg
+2	Delivery and Removals	Furniture delivery, food Delivery, fridge moving and removal etc.	delivery.jpg
+1	Everything Else	Event help, queue line up, and anything that doesn't fit into either category.	general.jpg
 \.
 
 
@@ -212,11 +215,9 @@ SELECT pg_catalog.setval('member_uid_seq', 45, true);
 -- Data for Name: task; Type: TABLE DATA; Schema: public; Owner: forge
 --
 
-COPY task (task_id, name, category) FROM stdin;
-1	Clean your house	General Cleaning
-2	Run your errands	Delivery & Shopping
-3	Pack your boxes	Book Moving
-4	Pack your boxes 1	Book Moving
+COPY task (id, name, postal_code, description, created_at, updated_at, start_date, start_time, cash_value, duration, category, posted_by, location) FROM stdin;
+6	Deliver parcel	\N	I need help to deliver a parcel to my aunty house.	2016-09-22	2016-09-22	2016-09-22	15:00:00	8	60	1	11	Bishan
+5	Wash car	\N	I need help to wash my car on this Monday. My car will be parked at Kent Vale's carpark.	2016-09-20	2016-09-22	2016-09-22	14:00:00	20	60	1	11	NUS
 \.
 
 
@@ -231,20 +232,20 @@ SELECT pg_catalog.setval('task_name_seq', 1, false);
 -- Name: task_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
 --
 
-SELECT pg_catalog.setval('task_task_id_seq', 4, true);
+SELECT pg_catalog.setval('task_task_id_seq', 6, true);
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: forge
 --
 
-COPY users (id, username, email, password, first_name, last_name, avatar, reputation, created_at, bio, remember_token, updated_at, role) FROM stdin;
+COPY users (id, username, email, password, first_name, last_name, profile_photo, reputation, created_at, bio, remember_token, updated_at, role) FROM stdin;
 12	david	david@mailinator.com	$2y$10$2rgA.b551n8Dj4Jmh3HtfOWJgr/xsep81d.lH4l03KUu9hAHnM3Hu	\N	\N	\N	0	2016-09-22	\N	\N	2016-09-22	0
 37	jacky	jacky@mailinator.com	$2y$10$bd7zfeucrFgQW.z41XACZe9jUXhZ8TlYQvU2pPOR5b4zStZ4nqS6C	\N	\N	\N	0	2016-09-22	\N	MnvzdiErFY52RnUPZaQxO4VwONH1MT8386ax5PEqYkWP7HwIxUq6s2gthFwA	2016-09-22	0
 38	weihan	weihan@mailinator.com	$2y$10$DAnRSCC5YQ2byDfM4mXbPOrpyqv7hZgVxkpQzvPItqEIAyumlvvMO	Wei Han	Chia	\N	0	2016-09-27	I am very helpful.	\N	2016-09-27	0
 13	admin	admin@mailinator.com	$2y$10$gMEsy4Qz3/fKJPiPNeRdUehhZL7mKjhcrMEYcEGbEei4fDSjlYF26	\N	\N	\N	0	2016-09-22	\N	ICMDDR8q85dE0BOMYvcU116rIyoJvxv1G2cSnLSO6amcvAe59DFrpB9fOvU1	2016-09-22	1
-11	weikangchia	weikangchia@mailinator.com	$2y$10$fsVRL3kQELehItkhsfKsR.cFYj10Aclh7xYYX9Lvf3DUVRPuu53CW	Wei Kang	Chia	\N	0	2016-09-22	\N	40jGHBbsIbigHKuBTmqMoUBFrDItjpN7ZNuNJdKtoZ2AWozKDgPX7XQe76Z0	2016-10-07	0
-45	mary.lim	mary.lim@mailinator.com	$2y$10$aOmTOXnr0cY9pq84GzbQqejsKnmAu.EO/XbVh6ORH9tapiVxY1k2S	Mary	Lim	\N	0	2016-10-07	Hi. I am a helpful person.	\N	2016-10-07	0
+45	mary.lim	mary.lim@mailinator.com	$2y$10$aOmTOXnr0cY9pq84GzbQqejsKnmAu.EO/XbVh6ORH9tapiVxY1k2S	Mary	Lim	\N	0	2016-10-07	Hi. I am a helpful person.	\N	2016-10-09	0
+11	weikangchia	weikangchia@mailinator.com	$2y$10$fsVRL3kQELehItkhsfKsR.cFYj10Aclh7xYYX9Lvf3DUVRPuu53CW	Wei Kang	Chia	11.png	0	2016-09-22	Android and Web programmer	40jGHBbsIbigHKuBTmqMoUBFrDItjpN7ZNuNJdKtoZ2AWozKDgPX7XQe76Z0	2016-10-09	0
 \.
 
 
@@ -269,7 +270,7 @@ ALTER TABLE ONLY category
 --
 
 ALTER TABLE ONLY task
-    ADD CONSTRAINT task_pkey PRIMARY KEY (task_id);
+    ADD CONSTRAINT task_pkey PRIMARY KEY (id);
 
 
 --
@@ -294,6 +295,22 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_unique_username UNIQUE (username);
+
+
+--
+-- Name: task_c.id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: forge
+--
+
+ALTER TABLE ONLY task
+    ADD CONSTRAINT "task_c.id_fkey" FOREIGN KEY (category) REFERENCES category(id) MATCH FULL ON DELETE CASCADE;
+
+
+--
+-- Name: task_u.id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: forge
+--
+
+ALTER TABLE ONLY task
+    ADD CONSTRAINT "task_u.id_fkey" FOREIGN KEY (posted_by) REFERENCES users(id) MATCH FULL ON DELETE CASCADE;
 
 
 --
