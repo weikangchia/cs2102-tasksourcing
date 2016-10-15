@@ -21,7 +21,7 @@
               <tbody>
                 @foreach($tasks as $task)
                 <tr class="top aligned">
-                  <td>{{ $task->task_name }}</td>
+                  <td>{{ link_to_route('tasks.show', $task->task_name, $task->t_id)}}</td>
                   <td>Location: {{ $task->location }}<br><br>{!! $task->task_description !!}</td>
                   <td>{{ $task->category_name }}</td>
                   <td>

@@ -12,26 +12,26 @@
         <div class="twelve wide column">
           <h2>Edit Task</h2>
 
-          {{ Form::model($task, array('route' => array('tasks.update', $task->id), 'method' => 'PUT', 'class' => 'ui form', 'files' => true)) }}
+          {{ Form::model($task, array('route' => array('tasks.update', $task->t_id), 'method' => 'PUT', 'class' => 'ui form', 'files' => true)) }}
 
           <div class="fields">
             <!-- name -->          
             <div class="nine wide field">
-              {{ Form::label('name', 'Name') }}
-              {{ Form::text('name', null, array('placeholder' => 'Name')) }}
+              {{ Form::label('task_name', 'Name') }}
+              {{ Form::text('task_name', null, array('placeholder' => 'Name')) }}
             </div>
 
             <!-- category -->
             <div class="seven wide field">
-              {{ Form::label('category', 'Category') }}
-              {{ Form::select('category', $categories, null, array('class' => 'ui fluid dropdown')) }}
+              {{ Form::label('category_id', 'Category') }}
+              {{ Form::select('category_id', $categories, null, array('class' => 'ui fluid dropdown')) }}
             </div>
           </div>
 
           <!-- description -->
           <div class="field">
-            {{ Form::label('description', 'Description') }}
-            {{ Form::textarea('description', null, array('rows' => '2', 'placeholder' => 'Description')) }}
+            {{ Form::label('task_description', 'Description') }}
+            {{ Form::textarea('task_description', null, array('rows' => '2', 'placeholder' => 'Description')) }}
           </div>
 
           <div class="fields">

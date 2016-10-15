@@ -79,8 +79,10 @@ class TasksController extends Controller
     */
     public function show($id)
     {
-		//
-	}
+		  $task = Task::find($id);
+
+      return view('task')->with('task', $task);
+	  }
 	
 	
 	
@@ -133,7 +135,7 @@ class TasksController extends Controller
     public function update(Request $request, $id)
      {
        $optional = [
-       	 'description'  => 'max:255',
+       	 'task_description'  => 'max:255',
        	 'duration'		=> 'integer',
        	 'location'		=> 'max:120',
          'postal_code'  => 'integer',
@@ -141,13 +143,14 @@ class TasksController extends Controller
        ];
 
        $task = Task::find($id);
+
        $required = [
-         'name'	=> 'required|max:64',
+         'task_name'	=> 'required|max:64',
          'start' => 'bail|date|after:now'
        ];
 
-       $task->name = $request->name;
-       $task->category = $request->category;
+       $task->task_name = $request->task_name;
+       $task->category_id = $request->category_id;
 
        // Y-m-d
        $task->start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
@@ -157,12 +160,12 @@ class TasksController extends Controller
 
        $request['start'] = "{$task->start_date} {$task->start_time}";
 
-       if($request->description != '')
+       if($request->task_description != '')
        {
-         $required['description'] = $optional['description'];
-         $task->description = $request->description;
+         $required['task_description'] = $optional['task_description'];
+         $task->task_description = $request->task_description;
        } else {
-       	 $task->description = NULL;
+       	 $task->task_description = NULL;
        }
 
        if($request->duration != '')
@@ -198,10 +201,9 @@ class TasksController extends Controller
        }
 
        $this->validate($request, $required);
-
        $task->save();
 
-       return redirect()->route('tasks.edit', $task->id);
+       return redirect()->route('tasks.edit', $task->t_id);
      }
 	
 	/**

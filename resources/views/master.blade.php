@@ -37,7 +37,7 @@
   }
 
   .ui.vertical.stripe {
-    padding: 8em 0em;
+    padding: 4em 0em;
   }
   .ui.vertical.stripe h3 {
     font-size: 2em;
@@ -132,6 +132,9 @@
         @if(Auth::check())
         <div class="item">
           {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui button')) }}
+        </div>
+        <div class="item">
+          {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui button')) }}
         </div>
         <div class="item">
           {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui button')) }}
