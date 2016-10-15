@@ -128,35 +128,45 @@ class TasksController extends Controller
        ];
 
        $task->name = $request->name;
-       $task->description = $request->description;
-       $task->duration = $request->duration;
-       $task->location = $request->location;
-       $task->postal_code = $request->postal_code;
-       $task->cash_value = $request->cash_value;
 
-       if($request->description != 0)
+       if($request->description != '')
        {
          $required['description'] = $optional['description'];
+         $task->description = $request->description;
+       } else {
+       	 $task->description = NULL;
        }
 
        if($request->duration != '')
        {
          $required['duration'] = $optional['duration'];
+         $task->duration = $request->duration;
+       } else {
+       	 $task->duration = NULL;
        }
 
        if($request->location != '')
        {
          $required['location'] = $optional['location'];
+         $task->location = $request->location;
+       } else {
+       	 $task->location = NULL;
        }
 
        if($request->postal_code != '')
        {
          $required['postal_code'] = $optional['postal_code'];
+         $task->postal_code = $request->postal_code;
+       } else {
+       	 $task->postal_code = NULL;
        }
 
        if($request->cash_value != '')
        {
          $required['cash_value'] = $optional['cash_value'];
+         $task->cash_value = $request->cash_value;
+       } else {
+       	 $task->cash_value = NULL;
        }
 
        $this->validate($request, $required);
