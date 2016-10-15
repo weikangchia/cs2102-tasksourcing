@@ -93,7 +93,14 @@ class TasksController extends Controller
     */
     public function edit($id)
     {
-		//
+    	$days = range(1, 31);
+    	$months = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
+    	$years = range(2016, 2025);
+
+    	$hours = range(0, 23);
+    	$minutes = range(0, 59);
+    	$task = Task::find($id);
+		return view('edit-task', compact('days', 'months', 'years', 'hours', 'minutes', 'task'));
 	}
 	
 	
