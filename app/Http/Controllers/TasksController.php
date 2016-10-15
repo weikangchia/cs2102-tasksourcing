@@ -12,7 +12,6 @@ define ('NEXT_LINE', '<br>');
 class TasksController extends Controller
 {
 	
-	
 	/**
 	* Display a listing of the resource.
     *
@@ -142,12 +141,20 @@ class TasksController extends Controller
 
        $task = Task::find($id);
        $required = [
-         'name'	=> 'required|max:64'
+         'name'	=> 'required|max:64',
+         'start' => 'bail|date|after:now'
        ];
 
        $task->name = $request->name;
        $task->category = $request->category;
-       $task->start_time = $request->start_hour + ':' + $request->start_minute + ':00';
+
+       // Y-m-d
+       $task->start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
+
+       // H:i:s
+       $task->start_time = "{$request->start_hour}:{$request->start_minute}:00";
+
+       $request['start'] = "{$task->start_date} {$task->start_time}";
 
        if($request->description != '')
        {
@@ -195,8 +202,6 @@ class TasksController extends Controller
 
        return redirect()->route('tasks.edit', $task->id);
      }
-	
-	
 	
 	/**
 	* Remove the specified resource from storage.

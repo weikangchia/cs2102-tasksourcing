@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DateTime;
 
 class Task extends Model
 {
@@ -17,6 +18,8 @@ class Task extends Model
             duration = :duration,
             category = :category,
             location = :location,
+            start_time = :start_time,
+            start_date = :start_date,
             updated_at = :updated_at WHERE id = :id",
       [
         'id' => $this->id,
@@ -27,7 +30,9 @@ class Task extends Model
         'duration' => $this->duration,
         'category' => $this->category,
         'location' => $this->location,
-        'updated_at' => new \DateTime()
+        'start_time' => $this->start_time,
+        'start_date' => $this->start_date,
+        'updated_at' => new DateTime()
       ]);
     } catch(QueryException $e) {
       return false;
@@ -49,8 +54,6 @@ class Task extends Model
       $task->description = $query[0]->description;
       $task->created_at = $query[0]->created_at;
       $task->updated_at = $query[0]->updated_at;
-      $task->start_date = $query[0]->start_date;
-      $task->start_time = $query[0]->start_time;
       $task->cash_value = $query[0]->cash_value;
       $task->duration = $query[0]->duration;
       $task->category = $query[0]->category;
