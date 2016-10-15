@@ -113,6 +113,9 @@
 
     // create sidebar and attach to menu open
     $('.ui.sidebar').sidebar('attach events', '.toc.item');
+
+    // load dropdown
+    $('.dropdown').dropdown();
   });
   </script>
 </head>
@@ -129,6 +132,9 @@
         @if(Auth::check())
         <div class="item">
           {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui button')) }}
+        </div>
+        <div class="item">
+          {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui button')) }}
         </div>
         <div class="item">
           {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui button')) }}
@@ -171,6 +177,7 @@
             {{ link_to_route('home', 'Home', '', array('class' => 'ui inverted button')) }}
             @if(Auth::check())
             {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui inverted button')) }}
+            {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui inverted button')) }}
             {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui inverted button')) }}
             @else
             {{ link_to_route('login', 'Log In', '', array('class' => 'ui inverted button')) }}

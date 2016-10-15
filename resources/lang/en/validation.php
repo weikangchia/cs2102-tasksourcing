@@ -95,6 +95,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'start' => [
+            'after' => 'The start date and time must be in the future.'
+        ]
     ],
 
     /*
