@@ -13,8 +13,6 @@ class Task extends Model
         SET name = :name,
             postal_code = :postal_code,
             description = :description,
-            start_date = :start_date,
-            start_time = :start_time,
             cash_value = :cash_value,
             duration = :duration,
             category = :category,
@@ -25,8 +23,6 @@ class Task extends Model
         'name' => $this->name,
         'postal_code' => $this->postal_code,
         'description' => $this->description,
-        'start_date' => $this->start_date,
-        'start_time' => $this->start_time,
         'cash_value' => $this->cash_value,
         'duration' => $this->duration,
         'category' => $this->category,
@@ -61,9 +57,12 @@ class Task extends Model
       $task->posted_by = $query[0]->posted_by;
       $task->location = $query[0]->location;
 
-      $task->start_day = substr($query[0]->created_at, 8);
-      $task->start_month = intval(substr($query[0]->created_at, 5, 2));
-      $task->start_year = substr($query[0]->created_at, 0, 4);
+      $task->start_day = substr($query[0]->start_date, 8);
+      $task->start_month = intval(substr($query[0]->start_date, 5, 2));
+      $task->start_year = substr($query[0]->start_date, 0, 4);
+
+      $task->start_hour = substr($query[0]->start_time, 0, 2);
+      $task->start_minute = substr($query[0]->start_time, 3, 2);
     } catch(QueryException $e) {
       return false;
     }
