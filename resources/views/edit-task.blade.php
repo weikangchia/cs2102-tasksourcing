@@ -9,7 +9,7 @@
     @section('content')
     <div class="ui vertical stripe segment">
       <div class="doubling stackable ui grid container">
-        <div class="column">
+        <div class="twelve wide column">
           <h2>Edit Task</h2>
 
           {{ Form::model($task, array('route' => array('tasks.update', $task->id), 'method' => 'PUT', 'class' => 'ui form', 'files' => true)) }}
