@@ -203,7 +203,7 @@ class TasksController extends Controller
        $this->validate($request, $required);
        $task->save();
 
-       return redirect()->route('tasks.edit', $task->t_id);
+       return redirect()->route('tasks.show', $task->t_id);
      }
 	
 	/**
