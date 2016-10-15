@@ -117,7 +117,8 @@ class TasksController extends Controller
     	}
 
     	$task = Task::find($id);
-		return view('edit-task', compact('days', 'months', 'years', 'hours', 'minutes', 'task', 'categories'));
+      
+		  return view('edit-task', compact('days', 'months', 'years', 'hours', 'minutes', 'task', 'categories'));
 	}
 	
 	
