@@ -113,9 +113,58 @@ class TasksController extends Controller
     * @return \Illuminate\Http\Response
     */
     public function update(Request $request, $id)
-    {
-		//
-	}
+     {
+       $optional = [
+       	 'description'  => 'max:255',
+       	 'duration'		=> 'integer',
+       	 'location'		=> 'max:120',
+         'postal_code'  => 'integer',
+         'cash_value'	=> 'numeric'
+       ];
+
+       $task = Task::find($id);
+       $required = [
+         'name'	=> 'required|max:64'
+       ];
+
+       $task->name = $request->name;
+       $task->description = $request->description;
+       $task->duration = $request->duration;
+       $task->location = $request->location;
+       $task->postal_code = $request->postal_code;
+       $task->cash_value = $request->cash_value;
+
+       if($request->description != 0)
+       {
+         $required['description'] = $optional['description'];
+       }
+
+       if($request->duration != '')
+       {
+         $required['duration'] = $optional['duration'];
+       }
+
+       if($request->location != '')
+       {
+         $required['location'] = $optional['location'];
+       }
+
+       if($request->postal_code != '')
+       {
+         $required['postal_code'] = $optional['postal_code'];
+       }
+
+       if($request->cash_value != '')
+       {
+         $required['cash_value'] = $optional['cash_value'];
+       }
+
+       $this->validate($request, $required);
+
+       $task->save();
+
+       return redirect()->route('tasks.edit', $task->id);
+     }
 	
 	
 	
