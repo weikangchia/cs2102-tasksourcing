@@ -73,7 +73,7 @@
               {{ Form::label('start_time', 'Start Time') }}
               <div class="ui buttons">
                 <div class="ui scrolling dropdown search button">
-                  <span class="text">{{ sprintf('%02d', $task->start_hour) }}</span>
+                  <span class="text">{{ $task->start_hour }}</span>
                   <div class="menu">
                     @foreach($hours as $hour)
                     <div class="item">{{ sprintf('%02d', $hour) }}</div>
@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="ui scrolling dropdown search button">
-                  <span class="text">{{ sprintf('%02d', $task->start_minute) }}</span>
+                  <span class="text">{{ $task->start_minute }}</span>
                   <div class="menu">
                     @foreach($minutes as $minute)
                     <div class="item">{{ sprintf('%02d', $minute) }}</div>
@@ -121,7 +121,21 @@
             </div>
           </div>
 
-          {{ Form::submit('Save Changes', array('class' => 'ui primary submit button')) }}
+          <div class="field">
+            {!! Form::submit('Save Changes', array('class' => 'ui primary submit button')) !!}
+          </div>
+
+          @if(count($errors))
+          <div class="ui form error">
+            <div class="ui error message">
+              <ul class="list">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
+          @endif
 
           {{ Form::close() }}
         </div>
