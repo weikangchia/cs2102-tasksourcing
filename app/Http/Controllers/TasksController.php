@@ -93,14 +93,32 @@ class TasksController extends Controller
     */
     public function edit($id)
     {
-    	$days = range(1, 31);
-    	$months = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
-    	$years = range(2016, 2025);
+    	for ($i = 1; $i < 32; $i++) {
+    		$days[$i] = $i;
+    	}
 
-    	$hours = range(0, 23);
-    	$minutes = range(0, 59);
+    	for ($i = 2016; $i < 2026; $i++) {
+    		$years[$i] = $i;
+    	}
+    	
+    	$months = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
+
+    	for ($i = 0; $i < 24; $i++) {
+    		$hours[$i] = sprintf('%02d', $i);
+    	}
+    	
+    	for ($i = 0; $i < 60; $i++) {
+    		$minutes[$i] = sprintf('%02d', $i);
+    	}
+
+    	$allCats = \DB::select("SELECT id, name FROM category");
+
+    	foreach($allCats as $cat) {
+    		$categories[$cat->id] = $cat->name;
+    	}
+
     	$task = Task::find($id);
-		return view('edit-task', compact('days', 'months', 'years', 'hours', 'minutes', 'task'));
+		return view('edit-task', compact('days', 'months', 'years', 'hours', 'minutes', 'task', 'categories'));
 	}
 	
 	
@@ -128,6 +146,8 @@ class TasksController extends Controller
        ];
 
        $task->name = $request->name;
+       $task->category = $request->category;
+       $task->start_time = $request->start_hour + ':' + $request->start_minute + ':00';
 
        if($request->description != '')
        {

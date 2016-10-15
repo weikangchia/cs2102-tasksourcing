@@ -24,7 +24,7 @@
             <!-- category -->
             <div class="seven wide field">
               {{ Form::label('category', 'Category') }}
-              {{ Form::select('category', array(1 => 'Everything Else', 2 => 'Delivery and Removals', 3 => 'Cleaning', 4 => 'Fix Stuff'), null, array('class' => 'ui fluid dropdown')) }}
+              {{ Form::select('category', $categories, null, array('class' => 'ui fluid dropdown')) }}
             </div>
           </div>
 
@@ -36,34 +36,20 @@
 
           <div class="fields">
             <!-- start date -->
-            <div class="six wide field">
+            <div class="seven wide field">
               {{ Form::label('start_date', 'Start Date') }}
-              <div class="ui buttons">
-                <div class="ui scrolling dropdown search button">
-                  <span class="text">{{ $task->start_day }}</span>
-                  <div class="menu">
-                    @foreach($days as $day)
-                    <div class="item">{{ $day }}</div>
-                    @endforeach
-                  </div>
+              <div class="fields">
+                <!-- day -->
+                <div class="field">
+                  {{ Form::select('start_day', $days, null, array('class' => 'ui fluid search dropdown')) }}
                 </div>
-
-                <div class="ui scrolling dropdown search button">
-                  <span class="text">{{ $months[$task->start_month] }}</span>
-                  <div class="menu">
-                    @foreach($months as $month)
-                    <div class="item">{{ $month }}</div>
-                    @endforeach
-                  </div>
+                <!-- month -->
+                <div class="field">
+                  {{ Form::select('start_month', $months, null, array('class' => 'ui fluid search dropdown')) }}
                 </div>
-
-                <div class="ui scrolling dropdown search button">
-                  <span class="text">{{ $task->start_year }}</span>
-                  <div class="menu">
-                    @foreach($years as $year)
-                    <div class="item">{{ $year }}</div>
-                    @endforeach
-                  </div>
+                <!-- year -->
+                <div class="field">
+                  {{ Form::select('start_year', $years, null, array('class' => 'ui fluid search dropdown')) }}
                 </div>
               </div>
             </div>
@@ -71,37 +57,28 @@
             <!-- start time -->
             <div class="four wide field">
               {{ Form::label('start_time', 'Start Time') }}
-              <div class="ui buttons">
-                <div class="ui scrolling dropdown search button">
-                  <span class="text">{{ $task->start_hour }}</span>
-                  <div class="menu">
-                    @foreach($hours as $hour)
-                    <div class="item">{{ sprintf('%02d', $hour) }}</div>
-                    @endforeach
-                  </div>
+              <div class="fields">
+                <!-- hour -->
+                <div class="field">
+                  {{ Form::select('start_hour', $hours, null, array('class' => 'ui fluid search dropdown')) }}
                 </div>
-
-                <div class="ui scrolling dropdown search button">
-                  <span class="text">{{ $task->start_minute }}</span>
-                  <div class="menu">
-                    @foreach($minutes as $minute)
-                    <div class="item">{{ sprintf('%02d', $minute) }}</div>
-                    @endforeach
-                  </div>
+                <!-- minute -->
+                <div class="field">
+                  {{ Form::select('start_minute', $minutes, null, array('class' => 'ui fluid search dropdown')) }}
                 </div>
               </div>
             </div>
 
-            <div class="six wide field">
+            <!-- duration -->
+            <div class="five wide field">
               {{ Form::label('duration', 'Duration (in minutes)') }}
-              {{ Form::text('duration', null, array('placeholder' => 'Duration')) }}
+              {{ Form::text('duration', null, array('placeholder' => 'Duration (in minutes)')) }}
             </div>
-
           </div>
 
           <div class="fields">
             <!-- location -->
-            <div class="seven wide field">
+            <div class="eight wide field">
               {{ Form::label('location', 'Location') }}
               {{ Form::text('location', null, array('placeholder' => 'Location')) }}
             </div>
@@ -112,7 +89,7 @@
               {{ Form::text('postal_code', null, array('placeholder' => 'Postal Code')) }}
             </div>
 
-            <div class="five wide field">
+            <div class="four wide field">
               {{ Form::label('cash_value', "Cash Value") }}
               <div class="ui labeled input">
                 <div class="ui label">$</div>
