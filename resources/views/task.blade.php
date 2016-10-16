@@ -9,7 +9,7 @@
     @section('content')
     <div class="ui vertical stripe segment">
       <div class="doubling stackable ui grid container">
-        <div class="sixteen wide column">
+        <div class="eight wide column">
           <h2>{{ $task->task_name }}</h2>
           <a class="ui image label">
             <img src="{{ asset('img/users/'.$task->posted_by_profile_photo) }}"> {{ $task->posted_by_username }}
@@ -27,7 +27,78 @@
           @else
           <button class="ui blue button">Bid</button>
           @endif
+          
+          <div class="ui comments">
+            <h4 class="ui dividing header">Comments</h4>
+            <div class="comment">
+              <a class="avatar">
+                <img src="{{ asset('img/square-image.png') }}">
+              </a>
+              <div class="content">
+                <a class="author">Author</a>
+                <div class="metadata">
+                  <div class="date">1 day ago</div>
+                </div>
+                <div class="text">
+                  <p>Comments</p>
+                </div>
+              </div>
+            </div>
+            <div class="comment">
+              <a class="avatar">
+                <img src="{{ asset('img/square-image.png') }}">
+              </a>
+              <div class="content">
+                <a class="author">Author</a>
+                <div class="metadata">
+                  <div class="date">1 day ago</div>
+                </div>
+                <div class="text">
+                  <p>Comments</p>
+                </div>
+              </div>
+            </div>
+            <form class="ui reply form">
+              <div class="field">
+                <textarea></textarea>
+              </div>
+              <div class="ui primary submit labeled icon button">
+                <i class="icon edit"></i> Add Comment
+              </div>
+            </form>
+          </div>
         </div>
+        @if(Auth::id() == $task->posted_by_id or Auth::user()-> role == 1)
+        <div class="eight wide column">
+          <h3>Bid Logs</h3>
+          <table class="ui very basic collapsing celled table">
+            <thead>
+              <tr><th>Bidders</th>
+              <th>Amount</th>
+              <th>Action</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td>
+                  <h4 class="ui image header">
+                    <img src="{{ asset('img/square-image.png') }}" class="ui mini rounded image">
+                    <div class="content">
+                      Bidders name
+                      <div class="sub header">Reputation here
+                    </div>
+                  </div>
+                </h4></td>
+                <td>
+                  20
+                </td>
+                <td>
+                  <button class="ui green button">Accept</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        @endif
       </div>
     </div>
 
