@@ -23,11 +23,27 @@
           <div class="ui hidden divider"></div>
           @if(Auth::id() == $task->posted_by_id or Auth::user()-> role == 1)
             {{ link_to_route('tasks.edit', 'Edit', $task->t_id, array('class' => 'ui blue button')) }}
-            <button class="ui red button">Delete</button>
+            <a href="javascript: $('.ui.small.modal').modal('show');" class="ui red button">Delete</a>
           @else
           <button class="ui blue button">Bid</button>
           @endif
         </div>
+      </div>
+    </div>
+
+    <div class="ui small modal">
+      <div class="header">
+        <i class="warning sign icon"></i>
+        Delete Task: {{ $task->task_name }}
+      </div>
+      <div class="content">
+        Are you sure you want to delete this task? This action cannot be undone.
+      </div>
+      <div class="actions">
+        {{ Form::open(array('route' => array('tasks.destroy', $task->t_id), 'method' => 'delete')) }}
+          {{ Form::button('Cancel', array('class' => 'ui cancel button')) }}
+          {{ Form::submit('Delete', array('class' => 'ui red button')) }}
+        {{ Form::close() }}
       </div>
     </div>
 
