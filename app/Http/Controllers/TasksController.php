@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Task;
 use Auth;
 use App\Http\Requests;
+use DB;
 
 define ('NEXT_LINE', '<br>');
 
 class TasksController extends Controller
 {
-	
+
 	/**
 	* Display a listing of the resource.
     *
@@ -26,8 +27,8 @@ class TasksController extends Controller
                     "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
                         t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
                         c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
-                        u.reputation  FROM Task t, Category c, Users u 
-                        WHERE t.category = c.id 
+                        u.reputation  FROM Task t, Category c, Users u
+                        WHERE t.category = c.id
                         AND t.posted_by = u.id
                         ORDER BY t.created_at DESC"
                 );
@@ -43,9 +44,9 @@ class TasksController extends Controller
 			return redirect()->route('login');
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	* Show the form for creating a new resource.
     *
@@ -53,11 +54,34 @@ class TasksController extends Controller
     */
     public function create()
     {
-        //
-	}
-	
-	
-	
+			for ($i = 1; $i < 32; $i++) {
+				$days[$i] = $i;
+			}
+
+			for ($i = 2016; $i < 2026; $i++) {
+				$years[$i] = $i;
+			}
+
+			$months = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
+
+			for ($i = 0; $i < 24; $i++) {
+				$hours[$i] = sprintf('%02d', $i);
+			}
+
+			for ($i = 0; $i < 60; $i++) {
+				$minutes[$i] = sprintf('%02d', $i);
+			}
+
+			$allCats = \DB::select("SELECT id, name FROM category");
+
+			foreach($allCats as $cat) {
+				$categories[$cat->id] = $cat->name;
+			}
+
+			return view('new-task', compact('days', 'months', 'years', 'hours', 'minutes', 'categories'));
+		}
+
+
 	/**
 	* Store a newly created resource in storage.
     *
@@ -66,11 +90,101 @@ class TasksController extends Controller
     */
     public function store(Request $request)
     {
-		//
-	}
-	
-	
-	
+
+			$optional = [
+				'task_description'  => 'max:255',
+				'duration'		=> 'integer',
+				'location'		=> 'max:120',
+				'postal_code'  => 'integer',
+				'cash_value'	=> 'numeric'
+			];
+
+			$required = [
+				'task_name'	=> 'required|max:64',
+				'start' => 'bail|date|after:now'
+			];
+
+			$task_name = $request->task_name;
+			$category_id = $request->category_id;
+
+			// Y-m-d
+			$start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
+
+			// H:i:s
+			$start_time = "{$request->start_hour}:{$request->start_minute}:00";
+
+			$request['start'] = "{$start_date} {$start_time}";
+
+			if($request->task_description != '')
+			{
+				$required['task_description'] = $optional['task_description'];
+				$task_description = $request->task_description;
+			} else {
+				$task_description = NULL;
+			}
+
+			if($request->duration != '')
+			{
+				$required['duration'] = $optional['duration'];
+				$duration = $request->duration;
+			} else {
+				$duration = NULL;
+			}
+
+			if($request->location != '')
+			{
+				$required['location'] = $optional['location'];
+				$location = $request->location;
+			} else {
+				$location = NULL;
+			}
+
+			if($request->postal_code != '')
+			{
+				$required['postal_code'] = $optional['postal_code'];
+				$postal_code = $request->postal_code;
+			} else {
+				$postal_code = NULL;
+			}
+
+			if($request->cash_value != '')
+			{
+				$required['cash_value'] = $optional['cash_value'];
+				$cash_value = $request->cash_value;
+			} else {
+				$cash_value = NULL;
+			}
+			$user = Auth::user();
+			$posted_by = $user->id;
+
+			$this->validate($request, $required);
+
+			try {
+				$query = \DB::insert("INSERT INTO task (name, postal_code, created_at, description, start_date,start_time, cash_value, duration, category, posted_by, location)
+				VALUES (:name, :postal_code, :created_at, :description, :start_date, :start_time, :cash_value, :duration, :category, :posted_by, :location)",
+				[
+					'name' => $task_name,
+					'postal_code' => $postal_code,
+					'description' => $task_description,
+					'start_date' => $start_date,
+					'start_time' => $start_time,
+					'cash_value' => $cash_value,
+					'duration' => $duration,
+					'category' => $category_id,
+					'posted_by' => $posted_by,
+					'location' => $location,
+					'created_at' =>new \DateTime()
+
+				]);
+				return redirect()->route('tasks.index');
+			} catch(QueryException $e) {
+				return redirect()->route('tasks.index');
+			}
+
+		}
+
+
+
 	/**
 	* Display the specified resource.
     *
@@ -83,9 +197,9 @@ class TasksController extends Controller
 
       return view('task')->with('task', $task);
 	  }
-	
-	
-	
+
+
+
 	/**
 	* Show the form for editing the specified resource.
     *
@@ -101,13 +215,13 @@ class TasksController extends Controller
     	for ($i = 2016; $i < 2026; $i++) {
     		$years[$i] = $i;
     	}
-    	
+
     	$months = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
 
     	for ($i = 0; $i < 24; $i++) {
     		$hours[$i] = sprintf('%02d', $i);
     	}
-    	
+
     	for ($i = 0; $i < 60; $i++) {
     		$minutes[$i] = sprintf('%02d', $i);
     	}
@@ -119,12 +233,12 @@ class TasksController extends Controller
     	}
 
     	$task = Task::find($id);
-      
+
 		  return view('edit-task', compact('days', 'months', 'years', 'hours', 'minutes', 'task', 'categories'));
 	}
-	
-	
-	
+
+
+
 	/**
 	* Update the specified resource in storage.
     *
@@ -205,7 +319,7 @@ class TasksController extends Controller
 
        return redirect()->route('tasks.edit', $task->t_id);
      }
-	
+
 	/**
 	* Remove the specified resource from storage.
     *
