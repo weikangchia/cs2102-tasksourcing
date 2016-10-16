@@ -11,6 +11,7 @@
       <div class="doubling stackable ui grid container">
         <div class="twelve wide column">
           <h2>Available Tasks</h2>
+          {{ link_to_route('tasks.create', 'Create a task', '', array('class' => 'ui blue button')) }}
           <table class="ui celled table green">
             <thead>
               <tr><th>Name</th>
@@ -53,7 +54,6 @@
                 </th>
               </tr></tfoot>
             </table>
-            {{ link_to_route('tasks.create', 'Create a task', array('class' => 'ui red button')) }}
         </div>
         <div class="four wide column">
           <h4>Refine search</h4>
