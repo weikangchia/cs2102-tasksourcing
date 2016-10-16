@@ -53,6 +53,7 @@
                 </th>
               </tr></tfoot>
             </table>
+            {{ link_to_route('tasks.create', 'Create a task', array('class' => 'ui red button')) }}
         </div>
         <div class="four wide column">
           <h4>Refine search</h4>
