@@ -9,6 +9,7 @@
   <!-- Site Properties -->
   <title>TaskHopper - @yield('title')</title>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/semantic.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/calendar.min.css') }}">
 
   <style type="text/css">
 
@@ -98,6 +99,7 @@
 
   <script src="{{ asset('js/jquery.min.js') }}"></script>
   <script src="{{ asset('js/semantic.min.js') }}"></script>
+  <script src="{{ asset('js/calendar.min.js') }}"></script>
   <script>
   $(document).ready(function() {
     // fix menu when passed
@@ -116,6 +118,10 @@
 
     // load dropdown
     $('.dropdown').dropdown();
+
+    $('#example2').calendar({
+      type: 'date'
+    });
   });
   </script>
 </head>
