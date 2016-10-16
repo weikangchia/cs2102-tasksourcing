@@ -203,7 +203,7 @@ class TasksController extends Controller
        $this->validate($request, $required);
        $task->save();
 
-       return redirect()->route('tasks.edit', $task->t_id);
+       return redirect()->route('tasks.show', $task->t_id);
      }
 	
 	/**
@@ -214,6 +214,13 @@ class TasksController extends Controller
     */
     public function destroy($id)
     {
-		//
+		try {
+			\DB::select("DELETE FROM task WHERE id = :id",
+				[ 'id' => $id ]);
+		} catch (QueryException $e) {
+			return false;
+		}
+
+		return redirect()->route('tasks.index');
 	}
 }
