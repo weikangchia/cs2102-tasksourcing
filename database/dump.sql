@@ -13,6 +13,27 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: task_db; Type: COMMENT; Schema: -; Owner: forge
+--
+
+COMMENT ON DATABASE task_db IS 'task database';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -208,7 +229,7 @@ SELECT pg_catalog.setval('category_id_seq', 4, true);
 -- Name: member_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
 --
 
-SELECT pg_catalog.setval('member_uid_seq', 45, true);
+SELECT pg_catalog.setval('member_uid_seq', 53, true);
 
 
 --
@@ -216,8 +237,18 @@ SELECT pg_catalog.setval('member_uid_seq', 45, true);
 --
 
 COPY task (id, name, postal_code, description, created_at, updated_at, start_date, start_time, cash_value, duration, category, posted_by, location) FROM stdin;
-6	Deliver parcel	\N	I need help to deliver a parcel to my aunty house.	2016-09-22	2016-09-22	2016-09-22	15:00:00	8	60	1	11	Bishan
-5	Wash car	\N	I need help to wash my car on this Monday. My car will be parked at Kent Vale's carpark.	2016-09-20	2016-09-22	2016-09-22	14:00:00	20	60	1	11	NUS
+7	Deliver Groceries	129404	I need a dozen eggs, a loaf of whole grain bread, and a stick of butter.	2016-10-03	2016-10-03	2016-10-05	08:00:00	5	30	2	37	Clementi
+6	Deliver parcel	\N	I need help to deliver a parcel to my aunty house.	2016-09-22	2016-09-22	2016-09-22	15:00:00	8	60	2	11	Bishan
+5	Wash car	\N	I need help to wash my car on this Monday. My car will be parked at Kent Vale's carpark.	2016-09-20	2016-09-22	2016-09-22	14:00:00	20	60	3	11	NUS
+8	Apartment Cleaning	269259	I need my apartment cleaned for a party I'm hosting.	2016-10-16	2016-10-16	2016-10-22	09:00:00	40	90	3	53	Holland Village
+9	Register for classes	119081	I need someone to register for my classes for me.	2016-10-16	\N	2016-11-20	08:00:00	10	15	1	46	NUS
+10	Pick up luggage.	400035	I need someone to pickup my luggage from outside my apartment and drop it off at the airport.	2016-10-16	\N	2016-11-04	21:00:00	30	60	2	51	Eunos
+11	Mount TV	560328	I need a strong person to help me mount my TV to the wall.	2016-10-14	2016-10-15	2016-10-23	12:00:00	30	45	4	48	Ang Mo Kio
+12	Furniture Assembly	640695	I need someone with good hands to help me assemble my furniture from IKEA.	2016-10-03	2016-10-03	2016-10-29	14:00:00	50	60	4	47	Jurong West
+13	Manning a booth	138607	I need someone to be in charge of the booth and give people information on breast cancer.	2016-10-15	\N	2016-10-24	08:00:00	100	180	1	45	NUS UTown
+14	Organize office supplies	760154	Organize our supplies onto shelves so that we can access them easily	2016-10-08	2016-10-08	2016-10-20	10:30:00	60	60	1	52	Yishun
+15	Shoe Cleaning	637820	I need my shoes cleaned.	2016-10-15	2016-10-15	2016-10-18	18:00:00	15	15	3	48	NTU
+16	Fix table	380105	One of my table's legs is broken and I would like it fixed	2016-10-10	\N	2016-11-28	13:30:00	45	60	4	37	Geylang
 \.
 
 
@@ -232,7 +263,7 @@ SELECT pg_catalog.setval('task_name_seq', 1, false);
 -- Name: task_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
 --
 
-SELECT pg_catalog.setval('task_task_id_seq', 6, true);
+SELECT pg_catalog.setval('task_task_id_seq', 16, true);
 
 
 --
@@ -246,6 +277,13 @@ COPY users (id, username, email, password, first_name, last_name, profile_photo,
 13	admin	admin@mailinator.com	$2y$10$gMEsy4Qz3/fKJPiPNeRdUehhZL7mKjhcrMEYcEGbEei4fDSjlYF26	\N	\N	\N	0	2016-09-22	\N	ICMDDR8q85dE0BOMYvcU116rIyoJvxv1G2cSnLSO6amcvAe59DFrpB9fOvU1	2016-09-22	1
 45	mary.lim	mary.lim@mailinator.com	$2y$10$aOmTOXnr0cY9pq84GzbQqejsKnmAu.EO/XbVh6ORH9tapiVxY1k2S	Mary	Lim	\N	0	2016-10-07	Hi. I am a helpful person.	\N	2016-10-09	0
 11	weikangchia	weikangchia@mailinator.com	$2y$10$fsVRL3kQELehItkhsfKsR.cFYj10Aclh7xYYX9Lvf3DUVRPuu53CW	Wei Kang	Chia	11.png	0	2016-09-22	Android and Web programmer	40jGHBbsIbigHKuBTmqMoUBFrDItjpN7ZNuNJdKtoZ2AWozKDgPX7XQe76Z0	2016-10-09	0
+46	kwonn	kwonn@mailinator.com	P@ssw0rd	Nathan	Kwon		0	2016-10-05	I live in Clementi.		2016-10-05	0
+47	shauntan	shauntan@mailinator.com	1234567890	Shaun	Tan		0	2016-10-16	I can lift heavy objects.		2016-10-16	0
+48	javisj	javisj@mailinator.com	P@ssw0rd	Javis	Janware		0	2016-10-15	I'm very good at cleaning and have worked for a cleaning company before.		2016-10-15	0
+50	vivyn	vivyn@mailinator.com	P@ssw0rd	Vivin	Yuen		0	2016-10-16	I am good at multitasking.		2016-10-16	0
+51	ep210	ep210@mailinator.com	P@ssw0rd	Elisabeth	Parks		0	2016-10-07	I am very strong.		2016-10-07	0
+52	darien1	darien1@mailinator.com	P@ssw0rd	Darien	Tan		0	2016-10-10			2016-10-10	0
+53	angie	angie@mailinator.com	P@ssw0rd	Angie	Das		0	2016-10-15			2016-10-15	0
 \.
 
 
@@ -320,8 +358,8 @@ ALTER TABLE ONLY task
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 GRANT ALL ON SCHEMA public TO forge;
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
