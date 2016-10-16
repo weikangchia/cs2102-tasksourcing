@@ -9,7 +9,7 @@
     @section('content')
     <div class="ui vertical stripe segment">
       <div class="doubling stackable ui grid container">
-        <div class="sixteen wide column">
+        <div class="twelve wide column">
           <h2>Available Tasks</h2>
           <table class="ui celled table green">
             <thead>
@@ -22,7 +22,7 @@
                 @foreach($tasks as $task)
                 <tr class="top aligned">
                   <td>{{ link_to_route('tasks.show', $task->task_name, $task->t_id)}}</td>
-                  <td>Location: {{ $task->location }}<br><br>{!! $task->task_description !!}</td>
+                  <td>{!! $task->task_description !!}<br><br>Location: {{ $task->location }}</td>
                   <td>{{ $task->category_name }}</td>
                   <td>
                     <h4 class="ui image header">
@@ -53,6 +53,30 @@
                 </th>
               </tr></tfoot>
             </table>
+        </div>
+        <div class="four wide column">
+          <h4>Refine search</h4>
+          
+          <form class="ui form">
+            <div class="field">
+              {{ Form::label('category_id', 'Filter by categories:') }}
+              {{ Form::select('category_id', $categories, null, array('class' => 'ui fluid dropdown')) }}
+            </div>
+            <div class="field">
+              {{ Form::label('date', 'Only show tasks after:') }}
+              <div class="ui calendar" id="example2">
+                <div class="ui input left icon" style="width: 100%">
+                  <i class="calendar icon"></i>
+                  <input type="text" placeholder="Date">
+                </div>
+              </div>
+            </div>
+            <div class="field">
+            {!! Form::submit('Search', array('class' => 'ui primary submit button')) !!}
+          </div>
+          </form>
+
+
         </div>
       </div>
     </div>
