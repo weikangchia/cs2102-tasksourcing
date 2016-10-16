@@ -31,12 +31,17 @@ class TasksController extends Controller
                         AND t.posted_by = u.id
                         ORDER BY t.created_at DESC"
                 );
+        $allCats = \DB::select("SELECT id, name FROM category");
+
+        foreach($allCats as $cat) {
+          $categories[$cat->id] = $cat->name;
+        }
 			}
 			catch(QueryException $e) {
 				return false;
 			}
 
-			return view('all-task')->with('tasks',$results);
+			return view('all-task')->with('tasks',$results)->with('categories',$categories);
 		}
 		else
         {
