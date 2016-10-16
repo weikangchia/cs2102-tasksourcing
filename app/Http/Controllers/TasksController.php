@@ -214,6 +214,13 @@ class TasksController extends Controller
     */
     public function destroy($id)
     {
-		//
+		try {
+			\DB::select("DELETE FROM task WHERE id = :id",
+				[ 'id' => $id ]);
+		} catch (QueryException $e) {
+			return false;
+		}
+
+		return redirect()->route('tasks.index');
 	}
 }
