@@ -78,6 +78,7 @@
             </div>
             <div class="field">
             {!! Form::submit('Search', array('class' => 'ui primary submit button')) !!}
+            {{ link_to_route('tasks.index', 'Reset', '', array('class' => 'ui button')) }}
             </div>
           {{ Form::close() }}
 
