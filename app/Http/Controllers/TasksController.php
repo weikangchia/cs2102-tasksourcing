@@ -44,9 +44,7 @@ class TasksController extends Controller
 
 			$today = new \DateTime();
 
-			$request = [
-				'date' => $today->format('d F Y')
-			];
+			$request = [];
 			return view('all-task', compact('tasks', 'categories', 'request'));
 		}
 		else
@@ -351,28 +349,31 @@ class TasksController extends Controller
 	public function search(Request $request) {
 
 		$dateQuery = ' ';
-		$bindings = [
-			'category' => $request->category_id
-		];
+		$catQuery = ' ';
 
 		if ($request->date) {
-			$dateQuery .= "AND t.start_date > :date ";
-
 			$date = \DateTime::createFromFormat('d F Y', $request->date);
-			$bindings['date'] = $date->format('Y-m-d');
+			$dateQuery .= "AND t.start_date > '" . $date->format('Y-m-d') . "'";
+		}
+
+		if ($request->category_id) {
+			$catQuery .= "AND t.category IN ("
+				. implode(',', $request->category_id)
+				. ")";
 		}
 
 		$query = "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
 			t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
 			c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
-			u.reputation  FROM Task t, Category c, Users u
+			u.reputation
+			FROM Task t, Category c, Users u
 			WHERE t.category = c.id
-			AND t.posted_by = u.id
-			AND t.category = :category"
+			AND t.posted_by = u.id"
+			. $catQuery
 			. $dateQuery
-			. "ORDER BY t.created_at DESC";
+			. " ORDER BY t.created_at DESC";
 
-		$tasks = \DB::select($query, $bindings);
+		$tasks = \DB::select($query);
 
 		$allCats = \DB::select("SELECT id, name FROM category");
 

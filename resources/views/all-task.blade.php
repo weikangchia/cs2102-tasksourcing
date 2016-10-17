@@ -65,7 +65,7 @@
           @endif
             <div class="field">
               {{ Form::label('category_id', 'Filter by categories:') }}
-              {{ Form::select('category_id', $categories, null, array('class' => 'ui fluid dropdown')) }}
+              {{ Form::select('category_id[]', $categories, null, array('class' => 'ui fluid dropdown', 'multiple' => '')) }}
             </div>
             <div class="field">
               {{ Form::label('date', 'Only show tasks after:') }}

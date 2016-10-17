@@ -119,8 +119,10 @@
     // load dropdown
     $('.dropdown').dropdown();
 
+    // datepicker settings
     $('.ui.calendar').calendar({
       type: 'date',
+      today: true,
       formatter: {
         date: function(date, settings) {
           if (!date) return '';
