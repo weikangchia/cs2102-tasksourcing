@@ -57,25 +57,29 @@
         </div>
         <div class="four wide column">
           <h4>Refine search</h4>
-          
-          <form class="ui form">
+
+          @if($request)
+          {{ Form::model($request, array('route' => 'tasks.search', 'class' => 'ui form', 'method' => 'get')) }}
+          @else
+          {{ Form::open(array('route' => 'tasks.search', 'class' => 'ui form', 'method' => 'get')) }}
+          @endif
             <div class="field">
               {{ Form::label('category_id', 'Filter by categories:') }}
               {{ Form::select('category_id', $categories, null, array('class' => 'ui fluid dropdown')) }}
             </div>
             <div class="field">
               {{ Form::label('date', 'Only show tasks after:') }}
-              <div class="ui calendar" id="example2">
+              <div class="ui calendar">
                 <div class="ui input left icon" style="width: 100%">
                   <i class="calendar icon"></i>
-                  <input type="text" placeholder="Date">
+                  {{ Form::text('date', null, array('placeholder' => 'Date'))}}
                 </div>
               </div>
             </div>
             <div class="field">
             {!! Form::submit('Search', array('class' => 'ui primary submit button')) !!}
-          </div>
-          </form>
+            </div>
+          {{ Form::close() }}
 
 
         </div>
