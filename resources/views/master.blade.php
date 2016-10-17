@@ -119,8 +119,16 @@
     // load dropdown
     $('.dropdown').dropdown();
 
-    $('#example2').calendar({
-      type: 'date'
+    $('.ui.calendar').calendar({
+      type: 'date',
+      formatter: {
+        date: function(date, settings) {
+          if (!date) return '';
+          return date.getDate() + ' '
+            + settings.text.months[date.getMonth()] + ' '
+            + date.getFullYear();
+        }
+      }
     });
   });
   </script>
