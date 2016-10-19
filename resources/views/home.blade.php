@@ -209,7 +209,7 @@
                 </div>
               </div>
               <div class="ui bottom attached button">
-                Book
+                Create Task
               </div>
             </div>
           </div>

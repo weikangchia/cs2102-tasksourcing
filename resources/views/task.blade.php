@@ -27,13 +27,14 @@
           @else
           <button class="ui blue button">Bid</button>
           @endif
-          
+
           <div class="ui comments">
             <h4 class="ui dividing header">Comments</h4>
+
+
+            @for ($i = 0; $i < 10; $i++)
+
             <div class="comment">
-              <a class="avatar">
-                <img src="{{ asset('img/square-image.png') }}">
-              </a>
               <div class="content">
                 <a class="author">Author</a>
                 <div class="metadata">
@@ -44,28 +45,21 @@
                 </div>
               </div>
             </div>
-            <div class="comment">
-              <a class="avatar">
-                <img src="{{ asset('img/square-image.png') }}">
-              </a>
-              <div class="content">
-                <a class="author">Author</a>
-                <div class="metadata">
-                  <div class="date">1 day ago</div>
-                </div>
-                <div class="text">
-                  <p>Comments</p>
-                </div>
-              </div>
-            </div>
-            <form class="ui reply form">
+            @endfor
+
+
+            {!! Form::open(array('method' => 'post', 'route' => 'comment.store', 'class' => 'ui form')) !!}
+            <div class="ui stacked segment">
               <div class="field">
-                <textarea></textarea>
+                <div class="ui left icon input">
+                  {!! Form::textarea('comment', null) !!}
+                  {{ Form::hidden('task', $task->t_id) }}
+                </div>
               </div>
-              <div class="ui primary submit labeled icon button">
-                <i class="icon edit"></i> Add Comment
-              </div>
-            </form>
+              {!! Form::token() !!}
+              {!! Form::submit('Add Comment', array('class' => 'ui fluid large teal submit button')) !!}
+              {!! Form::close() !!}
+
           </div>
         </div>
         @if(Auth::id() == $task->posted_by_id or Auth::user()-> role == 1)
