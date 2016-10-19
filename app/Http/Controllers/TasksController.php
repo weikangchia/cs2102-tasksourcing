@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use App\Bid;
+use App\Comment;
 use Auth;
 use App\Http\Requests;
 use DB;
@@ -30,13 +32,17 @@ class TasksController extends Controller
                         u.reputation  FROM Task t, Category c, Users u
                         WHERE t.category = c.id
                         AND t.posted_by = u.id
-                        ORDER BY t.created_at DESC"
-                );
-        $allCats = \DB::select("SELECT id, name FROM category");
+						AND t.start_date > :now
+                        ORDER BY t.created_at DESC",
+						[
+							'now' => new \DateTime()
 
-        foreach($allCats as $cat) {
-          $categories[$cat->id] = $cat->name;
-        }
+						]);
+				$allCats = \DB::select("SELECT id, name FROM category");
+
+				foreach($allCats as $cat) {
+				$categories[$cat->id] = $cat->name;
+				}
 			}
 			catch(QueryException $e) {
 				return false;
@@ -98,98 +104,97 @@ class TasksController extends Controller
     */
     public function store(Request $request)
     {
+		$optional = [
+			'task_description'  => 'max:255',
+			'duration'		=> 'integer',
+			'location'		=> 'max:120',
+			'postal_code'  => 'integer',
+			'cash_value'	=> 'numeric'
+		];
 
-			$optional = [
-				'task_description'  => 'max:255',
-				'duration'		=> 'integer',
-				'location'		=> 'max:120',
-				'postal_code'  => 'integer',
-				'cash_value'	=> 'numeric'
-			];
+		$required = [
+			'task_name'	=> 'required|max:64',
+			'start' => 'bail|date|after:now'
+		];
 
-			$required = [
-				'task_name'	=> 'required|max:64',
-				'start' => 'bail|date|after:now'
-			];
+		$task_name = $request->task_name;
+		$category_id = $request->category_id;
 
-			$task_name = $request->task_name;
-			$category_id = $request->category_id;
+		// Y-m-d
+		$start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
 
-			// Y-m-d
-			$start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
+		// H:i:s
+		$start_time = "{$request->start_hour}:{$request->start_minute}:00";
 
-			// H:i:s
-			$start_time = "{$request->start_hour}:{$request->start_minute}:00";
+		$request['start'] = "{$start_date} {$start_time}";
 
-			$request['start'] = "{$start_date} {$start_time}";
-
-			if($request->task_description != '')
-			{
-				$required['task_description'] = $optional['task_description'];
-				$task_description = $request->task_description;
-			} else {
-				$task_description = NULL;
-			}
-
-			if($request->duration != '')
-			{
-				$required['duration'] = $optional['duration'];
-				$duration = $request->duration;
-			} else {
-				$duration = NULL;
-			}
-
-			if($request->location != '')
-			{
-				$required['location'] = $optional['location'];
-				$location = $request->location;
-			} else {
-				$location = NULL;
-			}
-
-			if($request->postal_code != '')
-			{
-				$required['postal_code'] = $optional['postal_code'];
-				$postal_code = $request->postal_code;
-			} else {
-				$postal_code = NULL;
-			}
-
-			if($request->cash_value != '')
-			{
-				$required['cash_value'] = $optional['cash_value'];
-				$cash_value = $request->cash_value;
-			} else {
-				$cash_value = NULL;
-			}
-			$user = Auth::user();
-			$posted_by = $user->id;
-
-			$this->validate($request, $required);
-
-			try {
-				$query = \DB::insert("INSERT INTO task (name, postal_code, created_at, description, start_date,start_time, cash_value, duration, category, posted_by, location)
-				VALUES (:name, :postal_code, :created_at, :description, :start_date, :start_time, :cash_value, :duration, :category, :posted_by, :location)",
-				[
-					'name' => $task_name,
-					'postal_code' => $postal_code,
-					'description' => $task_description,
-					'start_date' => $start_date,
-					'start_time' => $start_time,
-					'cash_value' => $cash_value,
-					'duration' => $duration,
-					'category' => $category_id,
-					'posted_by' => $posted_by,
-					'location' => $location,
-					'created_at' =>new \DateTime()
-
-				]);
-				return redirect()->route('tasks.index');
-			} catch(QueryException $e) {
-				return redirect()->route('tasks.index');
-			}
-
+		if($request->task_description != '')
+		{
+			$required['task_description'] = $optional['task_description'];
+			$task_description = $request->task_description;
+		} else {
+			$task_description = NULL;
 		}
+
+		if($request->duration != '')
+		{
+			$required['duration'] = $optional['duration'];
+			$duration = $request->duration;
+		} else {
+			$duration = NULL;
+		}
+
+		if($request->location != '')
+		{
+			$required['location'] = $optional['location'];
+			$location = $request->location;
+		} else {
+			$location = NULL;
+		}
+
+		if($request->postal_code != '')
+		{
+			$required['postal_code'] = $optional['postal_code'];
+			$postal_code = $request->postal_code;
+		} else {
+			$postal_code = NULL;
+		}
+
+		if($request->cash_value != '')
+		{
+			$required['cash_value'] = $optional['cash_value'];
+			$cash_value = $request->cash_value;
+		} else {
+			$cash_value = NULL;
+		}
+		$user = Auth::user();
+		$posted_by = $user->id;
+
+		$this->validate($request, $required);
+
+		try {
+			$query = \DB::insert("INSERT INTO task (name, postal_code, created_at, description, start_date,start_time, cash_value, duration, category, posted_by, location)
+			VALUES (:name, :postal_code, :created_at, :description, :start_date, :start_time, :cash_value, :duration, :category, :posted_by, :location)",
+			[
+				'name' => $task_name,
+				'postal_code' => $postal_code,
+				'description' => $task_description,
+				'start_date' => $start_date,
+				'start_time' => $start_time,
+				'cash_value' => $cash_value,
+				'duration' => $duration,
+				'category' => $category_id,
+				'posted_by' => $posted_by,
+				'location' => $location,
+				'created_at' => new \DateTime()
+
+			]);
+			return redirect()->route('tasks.index');
+		} catch(QueryException $e) {
+			return redirect()->route('tasks.index');
+		}
+
+	}
 
 
 
@@ -201,10 +206,22 @@ class TasksController extends Controller
     */
     public function show($id)
     {
-		  $task = Task::find($id);
+		$hasBidded = false;
+		$task = Task::find($id);
 
-      return view('task')->with('task', $task);
-	  }
+		$bids = Bid::find($id, Auth::id());
+		if(sizeof($bids) == 1) {
+			$hasBidded = true;
+		}
+
+		if($task->posted_by_id == Auth::id()) {
+			$bids = Bid::findAllTaskBidders($id);
+		}
+
+		$comments = Comment::findByTaskId($id);
+
+      	return view('task', compact('task', 'hasBidded', 'bids', 'comments'));
+	}
 
 
 
@@ -242,7 +259,7 @@ class TasksController extends Controller
 
     	$task = Task::find($id);
 
-		  return view('edit-task', compact('days', 'months', 'years', 'hours', 'minutes', 'task', 'categories'));
+		return view('edit-task', compact('days', 'months', 'years', 'hours', 'minutes', 'task', 'categories'));
 	}
 
 
@@ -368,12 +385,13 @@ class TasksController extends Controller
 			u.reputation
 			FROM Task t, Category c, Users u
 			WHERE t.category = c.id
+			AND t.start_date > :now
 			AND t.posted_by = u.id"
 			. $catQuery
 			. $dateQuery
 			. " ORDER BY t.created_at DESC";
 
-		$tasks = \DB::select($query);
+		$tasks = \DB::select($query, [ 'now' => new \DateTime() ]);
 
 		$allCats = \DB::select("SELECT id, name FROM category");
 

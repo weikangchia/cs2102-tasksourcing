@@ -24,7 +24,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE bid (
-    status boolean NOT NULL,
+    status character varying DEFAULT 'pending'::character varying NOT NULL,
     created_at date NOT NULL,
     id integer NOT NULL,
     bid_amount double precision NOT NULL,
@@ -34,6 +34,27 @@ CREATE TABLE bid (
 
 
 ALTER TABLE bid OWNER TO forge;
+
+--
+-- Name: bid_id_seq; Type: SEQUENCE; Schema: public; Owner: forge
+--
+
+CREATE SEQUENCE bid_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE bid_id_seq OWNER TO forge;
+
+--
+-- Name: bid_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: forge
+--
+
+ALTER SEQUENCE bid_id_seq OWNED BY bid.id;
+
 
 --
 -- Name: category; Type: TABLE; Schema: public; Owner: forge
@@ -84,6 +105,27 @@ CREATE TABLE comment (
 
 
 ALTER TABLE comment OWNER TO forge;
+
+--
+-- Name: comment_id_seq; Type: SEQUENCE; Schema: public; Owner: forge
+--
+
+CREATE SEQUENCE comment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE comment_id_seq OWNER TO forge;
+
+--
+-- Name: comment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: forge
+--
+
+ALTER SEQUENCE comment_id_seq OWNED BY comment.id;
+
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: forge
@@ -199,7 +241,21 @@ ALTER SEQUENCE task_task_id_seq OWNED BY task.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: forge
 --
 
+ALTER TABLE ONLY bid ALTER COLUMN id SET DEFAULT nextval('bid_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: forge
+--
+
 ALTER TABLE ONLY category ALTER COLUMN id SET DEFAULT nextval('category_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: forge
+--
+
+ALTER TABLE ONLY comment ALTER COLUMN id SET DEFAULT nextval('comment_id_seq'::regclass);
 
 
 --
@@ -221,7 +277,17 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('member_uid_seq'::reg
 --
 
 COPY bid (status, created_at, id, bid_amount, u_id, t_id) FROM stdin;
+pending	2016-10-19	3	30	45	5
+rejected	2016-10-19	4	90	45	8
+rejected	2016-09-09	1	20	38	8
 \.
+
+
+--
+-- Name: bid_id_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
+--
+
+SELECT pg_catalog.setval('bid_id_seq', 4, true);
 
 
 --
@@ -248,7 +314,18 @@ SELECT pg_catalog.setval('category_id_seq', 4, true);
 --
 
 COPY comment (id, u_id, t_id, posted_date, detail) FROM stdin;
+1	11	5	2016-09-09	hello
+2	11	5	2016-10-19	bye
+3	11	5	2016-10-19	bye
+4	11	8	2016-10-19	hello
 \.
+
+
+--
+-- Name: comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
+--
+
+SELECT pg_catalog.setval('comment_id_seq', 4, true);
 
 
 --
@@ -264,8 +341,16 @@ SELECT pg_catalog.setval('member_uid_seq', 45, true);
 
 COPY task (id, name, postal_code, description, created_at, updated_at, start_date, start_time, cash_value, duration, category, posted_by, location) FROM stdin;
 6	Deliver parcel	550534	I need help to deliver a parcel to my aunty house.	2016-09-22	2016-09-22	2016-09-22	15:00:00	8	60	1	11	Bishan
-8	Wash van	550533	I need help to wash my van.	2016-10-16	\N	2016-11-16	15:00:00	20	60	3	11	Serangoon North
 5	Wash car @NUS	119220	I need someone to help me wash my car.	2016-09-20	2016-10-16	2016-10-23	15:05:00	30	60	3	11	NUS
+9	Deliver Groceries	120109	I need a dozen eggs, a loaf of whole grain bread, and a stick of butter.	2016-10-03	2016-10-03	2016-11-05	08:00:00	5	30	2	37	Clementi
+10	Pick up luggage	400035	I need someone to pickup my luggage from outside my apartment and drop it off at the airport.	2016-10-16	2016-10-16	2016-11-04	21:00:00	30	120	2	37	Eunos
+11	Mount TV	560328	I need a strong person to help me mount my TV to the wall.	2016-10-14	2016-10-14	2016-11-29	12:00:00	30	45	4	45	Ang Mo Kio
+12	Furniture Assembly	640695	I need someone with good hands to help me assemble my furniture from IKEA.	2016-10-03	2016-10-03	2016-10-29	14:00:00	50	60	4	12	Jurong West
+13	Manning a booth	138607	I need someone to be in charge of the booth and give people information on breast cancer.\t	2016-10-15	2016-10-15	2016-11-01	08:00:00	100	180	1	45	NUS UTown
+14	Organize office supplies	760154	Organize our supplies onto shelves so that we can access them easily.	2016-10-08	2016-10-08	2016-11-02	10:30:00	60	60	1	37	Yishun
+15	Shoe Cleaning	637820	I need my shoes cleaned.	2016-10-15	2016-10-15	2016-11-05	18:00:00	15	10	3	38	NTU
+16	Fix table	380105	One of my table's legs is broken and I would like it fixed	2016-10-10	2016-10-10	2016-11-28	13:30:00	45	60	4	12	Geylang
+8	Wash Van	550533	I need help to wash my van.	2016-10-16	2016-10-19	2016-11-16	15:00:00	20	60	3	11	Serangoon North
 \.
 
 
@@ -280,7 +365,7 @@ SELECT pg_catalog.setval('task_name_seq', 1, false);
 -- Name: task_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: forge
 --
 
-SELECT pg_catalog.setval('task_task_id_seq', 8, true);
+SELECT pg_catalog.setval('task_task_id_seq', 16, true);
 
 
 --
@@ -290,10 +375,10 @@ SELECT pg_catalog.setval('task_task_id_seq', 8, true);
 COPY users (id, username, email, password, first_name, last_name, profile_photo, reputation, created_at, bio, remember_token, updated_at, role) FROM stdin;
 12	david	david@mailinator.com	$2y$10$2rgA.b551n8Dj4Jmh3HtfOWJgr/xsep81d.lH4l03KUu9hAHnM3Hu	\N	\N	\N	0	2016-09-22	\N	\N	2016-09-22	0
 37	jacky	jacky@mailinator.com	$2y$10$bd7zfeucrFgQW.z41XACZe9jUXhZ8TlYQvU2pPOR5b4zStZ4nqS6C	\N	\N	\N	0	2016-09-22	\N	MnvzdiErFY52RnUPZaQxO4VwONH1MT8386ax5PEqYkWP7HwIxUq6s2gthFwA	2016-09-22	0
-38	weihan	weihan@mailinator.com	$2y$10$DAnRSCC5YQ2byDfM4mXbPOrpyqv7hZgVxkpQzvPItqEIAyumlvvMO	Wei Han	Chia	\N	0	2016-09-27	I am very helpful.	\N	2016-09-27	0
-13	admin	admin@mailinator.com	$2y$10$gMEsy4Qz3/fKJPiPNeRdUehhZL7mKjhcrMEYcEGbEei4fDSjlYF26	\N	\N	13.png	0	2016-09-22	\N	ICMDDR8q85dE0BOMYvcU116rIyoJvxv1G2cSnLSO6amcvAe59DFrpB9fOvU1	2016-10-15	1
-45	mary.lim	mary.lim@mailinator.com	$2y$10$aOmTOXnr0cY9pq84GzbQqejsKnmAu.EO/XbVh6ORH9tapiVxY1k2S	Mary	Lim	\N	0	2016-10-07	Hi. I am a helpful person.	\N	2016-10-15	0
 11	weikangchia	weikangchia@mailinator.com	$2y$10$fsVRL3kQELehItkhsfKsR.cFYj10Aclh7xYYX9Lvf3DUVRPuu53CW	Wei Kang	Chia	11.png	0	2016-09-22	Android and Web programmer	40jGHBbsIbigHKuBTmqMoUBFrDItjpN7ZNuNJdKtoZ2AWozKDgPX7XQe76Z0	2016-10-19	0
+38	weihan	weihan@mailinator.com	$2y$10$DAnRSCC5YQ2byDfM4mXbPOrpyqv7hZgVxkpQzvPItqEIAyumlvvMO	Wei Han	Chia	\N	0	2016-09-27	I am very helpful.	\N	2016-10-19	0
+45	mary.lim	mary.lim@mailinator.com	$2y$10$aOmTOXnr0cY9pq84GzbQqejsKnmAu.EO/XbVh6ORH9tapiVxY1k2S	Mary	Lim	\N	0	2016-10-07	Hi. I am a helpful person.	\N	2016-10-19	0
+13	admin	admin@mailinator.com	$2y$10$gMEsy4Qz3/fKJPiPNeRdUehhZL7mKjhcrMEYcEGbEei4fDSjlYF26	\N	\N	13.png	0	2016-09-22	\N	ICMDDR8q85dE0BOMYvcU116rIyoJvxv1G2cSnLSO6amcvAe59DFrpB9fOvU1	2016-10-19	1
 \.
 
 
