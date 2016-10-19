@@ -23,7 +23,7 @@ class TasksController extends Controller
 		if (Auth::check())
 		{
 			try {
-				$results = \DB::select(
+				$tasks = \DB::select(
                     "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
                         t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
                         c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
@@ -42,7 +42,10 @@ class TasksController extends Controller
 				return false;
 			}
 
-			return view('all-task')->with('tasks',$results)->with('categories',$categories);
+			$today = new \DateTime();
+
+			$request = [];
+			return view('all-task', compact('tasks', 'categories', 'request'));
 		}
 		else
         {
@@ -341,5 +344,43 @@ class TasksController extends Controller
 		}
 
 		return redirect()->route('tasks.index');
+	}
+
+	public function search(Request $request) {
+
+		$dateQuery = ' ';
+		$catQuery = ' ';
+
+		if ($request->date) {
+			$date = \DateTime::createFromFormat('d F Y', $request->date);
+			$dateQuery .= "AND t.start_date > '" . $date->format('Y-m-d') . "'";
+		}
+
+		if ($request->category_id) {
+			$catQuery .= "AND t.category IN ("
+				. implode(',', $request->category_id)
+				. ")";
+		}
+
+		$query = "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
+			t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
+			c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
+			u.reputation
+			FROM Task t, Category c, Users u
+			WHERE t.category = c.id
+			AND t.posted_by = u.id"
+			. $catQuery
+			. $dateQuery
+			. " ORDER BY t.created_at DESC";
+
+		$tasks = \DB::select($query);
+
+		$allCats = \DB::select("SELECT id, name FROM category");
+
+		foreach($allCats as $cat) {
+			$categories[$cat->id] = $cat->name;
+		}
+
+		return view('all-task', compact('tasks', 'categories', 'request'));
 	}
 }
