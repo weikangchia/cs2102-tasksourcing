@@ -17,5 +17,5 @@ Route::get('login', ['as' => 'login', 'uses' => 'AuthController@getLogin']);
 Route::post('handleLogin', ['as' => 'handleLogin', 'uses' => 'AuthController@handleLogin']);
 Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
 Route::resource('users', 'UsersController', ['only' => ['create', 'store', 'edit', 'update']]);
-Route::get('tasks/search', ['as' => 'tasks.search', 'uses' => 'TasksController@search']);
 Route::resource('tasks', 'TasksController', ['only' => ['index', 'edit', 'update', 'show', 'create', 'store', 'destroy']]);
+Route::resource('comment', 'CommentController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);

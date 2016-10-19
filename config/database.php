@@ -69,7 +69,7 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '5432'),
+            'port' => env('DB_PORT', '5433'),
             'database' => env('DB_DATABASE', 'task_db'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', 'P@ssw0rd'),
