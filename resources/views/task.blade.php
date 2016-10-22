@@ -23,6 +23,8 @@
           <p>{{ $task->task_description }}</p>
           <p>Cash value: ${{ number_format($task->cash_value, 2) }}</p>
           <p>Location: {{ $task->location}}</p>
+          <p>Date: {{ $task->start_date }}</p>
+          <p>Time: {{ date('h:i A', strtotime($task->start_time)) }} - {{ date('h:i A', strtotime("+".$task->duration." minutes", strtotime($task->start_time))) }}</p>
           <img src="{{ 'https://maps.googleapis.com/maps/api/staticmap?center='.$task->postal_code.'&zoom=14&markers=color:blue%7Clabel:S%7C'.$task->postal_code.'&size=380x280&key=AIzaSyBBWn7y_jI3CPCuXJ5KE6VdsVXcp2X6p9c' }}">
           <div class="ui hidden divider"></div>
           @if(Auth::id() == $task->posted_by_id or Auth::user()-> role == 1)

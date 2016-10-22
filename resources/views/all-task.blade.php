@@ -23,13 +23,14 @@
                 @foreach($tasks as $task)
                 <tr class="top aligned">
                   <td>{{ link_to_route('tasks.show', $task->task_name, $task->t_id)}}</td>
-                  <td>{!! $task->task_description !!}<br><br>Location: {{ $task->location }}</td>
+                  <td>{!! $task->task_description !!}<br><br>Location: {{ $task->location }}
+                  <br>Date: {{ $task->start_date }}
+                  <br>Time: {{ date('h:i A', strtotime($task->start_time)) }} - {{ date('h:i A', strtotime("+".$task->duration." minutes", strtotime($task->start_time))) }}</td>
                   <td>{{ $task->category_name }}</td>
                   <td>
                     <h4 class="ui image header">
                       <div class="content">
                         {{ $task->username }}
-                        <div class="sub header">{{ $task->reputation }}</div>
                       </div>
                     </h4>
                   </td>
