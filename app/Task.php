@@ -20,7 +20,8 @@ class Task extends Model
             location = :location,
             start_time = :start_time,
             start_date = :start_date,
-            updated_at = :updated_at WHERE id = :id",
+            updated_at = :updated_at
+        WHERE id = :id",
       [
         'id' => $this->t_id,
         'name' => $this->task_name,
