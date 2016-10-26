@@ -91,6 +91,7 @@
         <div class="eight wide column">
           <h3>Bid Logs</h3>
 
+          @if($bids)
           <table class="ui very basic collapsing celled table">
             <thead>
               <tr><th>Bidders</th>
@@ -130,12 +131,15 @@
                       {{ Form::submit('Accept', array('class' => 'ui green button')) }}
                       {!! Form::close() !!}
                     @endif
-                    
+
                   </td>
                 </tr>
               @endforeach
             </tbody>
           </table>
+          @else
+          <h4>No bids yet.</h4>
+          @endif
         </div>
         @endif
       </div>
