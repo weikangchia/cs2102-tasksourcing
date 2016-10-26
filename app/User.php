@@ -87,7 +87,6 @@ class User extends Authenticatable
       $user->role = $query[0]->role;
       $user->first_name = $query[0]->first_name;
       $user->last_name = $query[0]->last_name;
-      $user->reputation = $query[0]->reputation;
       $user->created_at = $query[0]->created_at;
       $user->profile_photo = $query[0]->profile_photo;
       $user->bio = $query[0]->bio;

@@ -28,8 +28,8 @@ class TasksController extends Controller
 				$tasks = \DB::select(
                     "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
                         t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
-                        c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
-                        u.reputation  FROM Task t, Category c, Users u
+                        c.name AS category_name, u.id AS user_id, u.username, u.profile_photo
+                        FROM Task t, Category c, Users u
                         WHERE t.category = c.id
                         AND t.posted_by = u.id
 						AND t.start_date > :now
@@ -391,8 +391,7 @@ class TasksController extends Controller
 
 		$query = "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
 			t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
-			c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
-			u.reputation
+			c.name AS category_name, u.id AS user_id, u.username, u.profile_photo
 			FROM Task t, Category c, Users u
 			WHERE t.category = c.id
 			AND t.posted_by = u.id"
