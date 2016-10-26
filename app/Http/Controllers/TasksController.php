@@ -214,7 +214,7 @@ class TasksController extends Controller
 			$hasBidded = true;
 		}
 
-		if($task->posted_by_id == Auth::id()) {
+		if($task->posted_by_id == Auth::id() || Auth::user()->role) {
 			$bids = Bid::findAllTaskBidders($id);
 		}
 
