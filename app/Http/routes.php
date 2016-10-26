@@ -21,5 +21,6 @@ Route::get('tasks/search', ['as' => 'tasks.search', 'uses' => 'TasksController@s
 Route::resource('tasks', 'TasksController', ['only' => ['index', 'edit', 'update', 'show', 'create', 'store', 'destroy']]);
 Route::resource('bid', 'BidController', ['only' => ['show', 'store', 'update']]);
 Route::resource('comment', 'CommentController', ['only' => ['store']]);
+Route::resource('events', 'EventController', ['only' => ['index']]);
 Route::post('handleAcceptBid', ['as' => 'handleAcceptBid', 'uses' => 'BidController@acceptBid']);
 Route::post('handleRejectBid', ['as' => 'handleRejectBid', 'uses' => 'BidController@rejectBid']);

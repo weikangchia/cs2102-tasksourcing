@@ -148,6 +148,8 @@
   <div class="ui vertical inverted sidebar menu">
     <a class="active item">Home</a>
     @if(Auth::check())
+    {{ link_to_route('events.index', 'Events', '', array('class' => 'item')) }}
+    {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'item')) }}
     {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'item')) }}
     {{ link_to_route('logout', 'Log Out', '', array('class' => 'item')) }}
     @else
@@ -168,6 +170,7 @@
           <a class="active item">Home</a>
           <div class="right item">
             @if(Auth::check())
+            {{ link_to_route('events.index', 'Events', '', array('class' => 'ui inverted button'))}}
             {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui inverted button'))}}
             {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui inverted button')) }}
             {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui inverted button')) }}

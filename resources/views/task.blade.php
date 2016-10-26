@@ -31,7 +31,7 @@
             {{ link_to_route('tasks.edit', 'Edit', $task->t_id, array('class' => 'ui blue button')) }}
             <a href="javascript: $('.ui.small.modal').modal('show');" class="ui red button">Delete</a>
           @else
-            @if($hasBidded)
+            @if($hasBidded && (strcmp ($bids[0]->status, 'pending') == 0 || strcmp ($bids[0]->status, 'rejected') == 0))
               {{ Form::model($bids[0], array('route' => array('bid.update', $bids[0]->id), 'method' => 'PUT', 'class' => 'ui form', 'files' => true)) }}
                 <div class="four wide field">
                   {{ Form::label('bid_amount', "Bid Value") }}
@@ -43,6 +43,8 @@
                 {{ Form::hidden('t_id', $task->t_id) }}
                 {{ Form::submit('Update', array('class' => 'ui blue button')) }}
               {!! Form::close() !!}
+            @elseif($hasBidded && strcmp ($bids[0]->status, 'accepted') == 0)
+              <p>Your bid has been accepted.</p>
             @else
               {!! Form::open(array('route' => 'bid.store', 'class' => 'ui form')) !!}
                 <div class="four wide field">

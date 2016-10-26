@@ -147,6 +147,9 @@
         </div>
         @if(Auth::check())
         <div class="item">
+          {{ link_to_route('events.index', 'Events', '', array('class' => 'ui button')) }}
+        </div>
+        <div class="item">
           {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui button')) }}
         </div>
         <div class="item">
@@ -171,6 +174,7 @@
   <div class="ui vertical inverted sidebar menu">
     {{ link_to_route('home', 'Home', '', array('class' => 'item')) }}
     @if(Auth::check())
+    {{ link_to_route('events.index', 'Events', '', array('class' => 'item')) }}
     {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'item')) }}
     {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'item')) }}
     {{ link_to_route('logout', 'Log Out', '', array('class' => 'item')) }}
@@ -192,6 +196,7 @@
           <div class="right item">
             {{ link_to_route('home', 'Home', '', array('class' => 'ui inverted button')) }}
             @if(Auth::check())
+            {{ link_to_route('events.index', 'Events', '', array('class' => 'ui inverted button')) }}
             {{ link_to_route('tasks.index', 'Tasks', '', array('class' => 'ui inverted button')) }}
             {{ link_to_route('users.edit', 'Profile', Auth::id(), array('class' => 'ui inverted button')) }}
             {{ link_to_route('logout', 'Log Out', '', array('class' => 'ui inverted button')) }}
