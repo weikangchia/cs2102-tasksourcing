@@ -24,7 +24,7 @@ class Bid extends Model
     public static function findAllTaskBidders($task_id) {
         try{
             $query = \DB::select("SELECT b.status, b.id AS b_id, b.bid_amount, u.id AS u_id, u.username,
-                u.profile_photo, u.reputation
+                u.profile_photo
                 FROM bid b, users u
                 WHERE t_id = :t_id
                 AND b.u_id = u.id",
