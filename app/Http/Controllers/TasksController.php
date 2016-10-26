@@ -48,8 +48,6 @@ class TasksController extends Controller
 				return false;
 			}
 
-			$today = new \DateTime();
-
 			$request = [];
 			return view('all-task', compact('tasks', 'categories', 'request'));
 		}
@@ -379,6 +377,12 @@ class TasksController extends Controller
 				. ")";
 		}
 
+		if (strcmp($request->order_by, 'newest') == 0) {
+			$orderQuery = " ORDER BY t.created_at DESC";
+		} else {
+			$orderQuery = " ORDER BY t.start_date, t.start_time";
+		}
+
 		$query = "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
 			t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
 			c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
@@ -389,7 +393,7 @@ class TasksController extends Controller
 			AND t.posted_by = u.id"
 			. $catQuery
 			. $dateQuery
-			. " ORDER BY t.created_at DESC";
+			. $orderQuery;
 
 		$tasks = \DB::select($query, [ 'now' => new \DateTime() ]);
 
