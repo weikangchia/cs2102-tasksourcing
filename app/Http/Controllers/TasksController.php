@@ -363,12 +363,18 @@ class TasksController extends Controller
 
 	public function search(Request $request) {
 
-		$dateQuery = ' ';
+		$dateQuery = ' AND t.start_date > :now';
 		$catQuery = ' ';
+		$now = new \DateTime();
+		$options = ['now' => $now];
 
 		if ($request->date) {
 			$date = \DateTime::createFromFormat('d F Y', $request->date);
-			$dateQuery .= "AND t.start_date > '" . $date->format('Y-m-d') . "'";
+
+			if ($date > $now) {
+					$dateQuery = " AND t.start_date > '" . $date->format('Y-m-d') . "'";
+					$options = [];
+			}
 		}
 
 		if ($request->category_id) {
@@ -389,13 +395,12 @@ class TasksController extends Controller
 			u.reputation
 			FROM Task t, Category c, Users u
 			WHERE t.category = c.id
-			AND t.start_date > :now
 			AND t.posted_by = u.id"
 			. $catQuery
 			. $dateQuery
 			. $orderQuery;
 
-		$tasks = \DB::select($query, [ 'now' => new \DateTime() ]);
+		$tasks = \DB::select($query, $options);
 
 		$allCats = \DB::select("SELECT id, name FROM category");
 

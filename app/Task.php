@@ -74,10 +74,6 @@ class Task extends Model
       $task->start_time = $query[0]->start_time;
       $task->duration = $query[0]->duration;
 
-      $task->start_day = substr($query[0]->start_date, 8);
-      $task->start_month = intval(substr($query[0]->start_date, 5, 2));
-      $task->start_year = substr($query[0]->start_date, 0, 4);
-
       $task->start_hour = substr($query[0]->start_time, 0, 2);
       $task->start_minute = substr($query[0]->start_time, 3, 2);
     } catch(QueryException $e) {
