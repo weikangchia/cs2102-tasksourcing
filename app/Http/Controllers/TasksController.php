@@ -114,19 +114,19 @@ class TasksController extends Controller
 
 		$required = [
 			'task_name'	=> 'required|max:64',
-			'start' => 'bail|date|after:now'
+			'start_date' => 'bail|date|after:now'
 		];
 
 		$task_name = $request->task_name;
 		$category_id = $request->category_id;
 
 		// Y-m-d
-		$start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
+		$start_date = $request->start_date;
 
 		// H:i:s
 		$start_time = "{$request->start_hour}:{$request->start_minute}:00";
 
-		$request['start'] = "{$start_date} {$start_time}";
+		$request['start_date'] = "{$start_date} {$start_time}";
 
 		if($request->task_description != '')
 		{
@@ -285,19 +285,19 @@ class TasksController extends Controller
 
        $required = [
          'task_name'	=> 'required|max:64',
-         'start' => 'bail|date|after:now'
+         'start_date' => 'bail|date|after:now'
        ];
 
        $task->task_name = $request->task_name;
        $task->category_id = $request->category_id;
 
        // Y-m-d
-       $task->start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
+       $task->start_date = $request->start_date;
 
        // H:i:s
        $task->start_time = "{$request->start_hour}:{$request->start_minute}:00";
 
-       $request['start'] = "{$task->start_date} {$task->start_time}";
+       $request['start_date'] = "{$task->start_date} {$task->start_time}";
 
        if($request->task_description != '')
        {
