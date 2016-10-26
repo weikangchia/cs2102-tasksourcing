@@ -70,6 +70,9 @@ class Task extends Model
       $task->posted_by_username = $query[0]->username;
       $task->posted_by_profile_photo = $query[0]->profile_photo;
       $task->posted_by_reputation = $query[0]->reputation;
+      $task->start_date = $query[0]->start_date;
+      $task->start_time = $query[0]->start_time;
+      $task->duration = $query[0]->duration;
 
       $task->start_day = substr($query[0]->start_date, 8);
       $task->start_month = intval(substr($query[0]->start_date, 5, 2));

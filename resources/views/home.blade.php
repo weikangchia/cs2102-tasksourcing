@@ -208,9 +208,6 @@
                   {{ $category->description }}
                 </div>
               </div>
-              <div class="ui bottom attached button">
-                Book
-              </div>
             </div>
           </div>
         @endforeach
