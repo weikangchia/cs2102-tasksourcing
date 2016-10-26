@@ -9,7 +9,8 @@ class Comment extends Model
       $query = \DB::select("SELECT u.username, c.detail, c.posted_date, u.profile_photo
                         FROM comment c, users u
                         WHERE c.t_id = :t_id
-                        AND c.u_id = u.id",
+                        AND c.u_id = u.id
+                        ORDER BY c.id",
       [
           't_id' => $task_id,
       ]);

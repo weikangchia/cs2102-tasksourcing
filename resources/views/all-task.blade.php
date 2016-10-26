@@ -12,6 +12,8 @@
         <div class="twelve wide column">
           <h2>Available Tasks</h2>
           {{ link_to_route('tasks.create', 'Create a task', '', array('class' => 'ui blue button')) }}
+
+          @if($tasks)
           <table class="ui celled table green">
             <thead>
               <tr><th>Name</th>
@@ -38,6 +40,9 @@
                 @endforeach
               </tbody>
             </table>
+            @else
+            <h4>No tasks found.</h4>
+            @endif
         </div>
         <div class="four wide column">
           <h4>Refine search</h4>
