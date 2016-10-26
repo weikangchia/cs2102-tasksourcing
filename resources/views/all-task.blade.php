@@ -66,6 +66,11 @@
               </div>
             </div>
             <div class="field">
+              {{ Form::label('order_by', 'Order tasks by:') }}
+              {{ Form::select('order_by', array('newest' => 'Newest', 'start' => 'Start Date'),
+                null, array('class' => 'ui fluid dropdown')) }}
+            </div>
+            <div class="field">
             {!! Form::submit('Search', array('class' => 'ui primary submit button')) !!}
             {{ link_to_route('tasks.index', 'Reset', '', array('class' => 'ui button')) }}
             </div>

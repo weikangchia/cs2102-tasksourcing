@@ -24,10 +24,7 @@
         </div>
         <div class="ten wide column">
           <h2>Edit Profile</h2>
-          <p><small>Joined TaskHopper @ {{ date('M d, Y', strtotime($user->created_at)) }}</small><p>
-          <div class="ui label teal">
-            <i class="smile icon"></i> Reputation {{ $user->reputation }}
-          </div>
+          Joined TaskHopper @ {{ date('M d, Y', strtotime($user->created_at)) }}
 
           <div class="ui hidden divider"></div>
 

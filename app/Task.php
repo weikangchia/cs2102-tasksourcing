@@ -48,9 +48,9 @@ class Task extends Model
       $query = \DB::select("SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
                         t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
                         c.id AS category_id, c.name AS category_name, u.id AS user_id, u.username,
-                        u.profile_photo, u.reputation
-                        FROM Task t, Category c, Users u 
-                        WHERE t.category = c.id 
+                        u.profile_photo
+                        FROM Task t, Category c, Users u
+                        WHERE t.category = c.id
                         AND t.posted_by = u.id
                         AND t.id = :id",
       [
@@ -69,14 +69,9 @@ class Task extends Model
       $task->posted_by_id = $query[0]->user_id;
       $task->posted_by_username = $query[0]->username;
       $task->posted_by_profile_photo = $query[0]->profile_photo;
-      $task->posted_by_reputation = $query[0]->reputation;
       $task->start_date = $query[0]->start_date;
       $task->start_time = $query[0]->start_time;
       $task->duration = $query[0]->duration;
-
-      $task->start_day = substr($query[0]->start_date, 8);
-      $task->start_month = intval(substr($query[0]->start_date, 5, 2));
-      $task->start_year = substr($query[0]->start_date, 0, 4);
 
       $task->start_hour = substr($query[0]->start_time, 0, 2);
       $task->start_minute = substr($query[0]->start_time, 3, 2);

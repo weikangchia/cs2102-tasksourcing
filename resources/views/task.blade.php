@@ -114,7 +114,6 @@
                       @endif
                       <div class="content">
                         {{ $bid->username }}
-                        <div class="sub header">{{ $bid->reputation }}
                       </div>
                     </div>
                   </h4></td>

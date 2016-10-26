@@ -38,24 +38,16 @@
         <!-- start date -->
         <div class="seven wide field">
           {{ Form::label('start_date', 'Start Date') }}
-          <div class="fields">
-            <!-- day -->
-            <div class="field">
-              {{ Form::select('start_day', $days, null, array('class' => 'ui fluid search dropdown')) }}
-            </div>
-            <!-- month -->
-            <div class="field">
-              {{ Form::select('start_month', $months, null, array('class' => 'ui fluid search dropdown')) }}
-            </div>
-            <!-- year -->
-            <div class="field">
-              {{ Form::select('start_year', $years, null, array('class' => 'ui fluid search dropdown')) }}
+          <div class="ui calendar">
+            <div class="ui input left icon" style="width: 100%">
+              <i class="calendar icon"></i>
+              {{ Form::text('start_date', null, array('placeholder' => 'Date'))}}
             </div>
           </div>
         </div>
 
         <!-- start time -->
-        <div class="four wide field">
+        <div class="three wide field">
           {{ Form::label('start_time', 'Start Time') }}
           <div class="fields">
             <!-- hour -->
@@ -70,7 +62,7 @@
         </div>
 
         <!-- duration -->
-        <div class="five wide field">
+        <div class="six wide field">
           {{ Form::label('duration', 'Duration (in minutes)') }}
           {{ Form::text('duration', null, array('placeholder' => 'Duration (in minutes)')) }}
         </div>

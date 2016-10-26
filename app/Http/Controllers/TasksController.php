@@ -28,8 +28,8 @@ class TasksController extends Controller
 				$tasks = \DB::select(
                     "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
                         t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
-                        c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
-                        u.reputation  FROM Task t, Category c, Users u
+                        c.name AS category_name, u.id AS user_id, u.username, u.profile_photo
+                        FROM Task t, Category c, Users u
                         WHERE t.category = c.id
                         AND t.posted_by = u.id
 						AND t.start_date > :now
@@ -47,8 +47,6 @@ class TasksController extends Controller
 			catch(QueryException $e) {
 				return false;
 			}
-
-			$today = new \DateTime();
 
 			$request = [];
 			return view('all-task', compact('tasks', 'categories', 'request'));
@@ -114,19 +112,19 @@ class TasksController extends Controller
 
 		$required = [
 			'task_name'	=> 'required|max:64',
-			'start' => 'bail|date|after:now'
+			'start_date' => 'bail|date|after:now'
 		];
 
 		$task_name = $request->task_name;
 		$category_id = $request->category_id;
 
 		// Y-m-d
-		$start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
+		$start_date = $request->start_date;
 
 		// H:i:s
 		$start_time = "{$request->start_hour}:{$request->start_minute}:00";
 
-		$request['start'] = "{$start_date} {$start_time}";
+		$request['start_date'] = "{$start_date} {$start_time}";
 
 		if($request->task_description != '')
 		{
@@ -285,19 +283,19 @@ class TasksController extends Controller
 
        $required = [
          'task_name'	=> 'required|max:64',
-         'start' => 'bail|date|after:now'
+         'start_date' => 'bail|date|after:now'
        ];
 
        $task->task_name = $request->task_name;
        $task->category_id = $request->category_id;
 
        // Y-m-d
-       $task->start_date = "{$request->start_year}-{$request->start_month}-{$request->start_day}";
+       $task->start_date = $request->start_date;
 
        // H:i:s
        $task->start_time = "{$request->start_hour}:{$request->start_minute}:00";
 
-       $request['start'] = "{$task->start_date} {$task->start_time}";
+       $request['start_date'] = "{$task->start_date} {$task->start_time}";
 
        if($request->task_description != '')
        {
@@ -365,12 +363,18 @@ class TasksController extends Controller
 
 	public function search(Request $request) {
 
-		$dateQuery = ' ';
+		$dateQuery = ' AND t.start_date > :now';
 		$catQuery = ' ';
+		$now = new \DateTime();
+		$options = ['now' => $now];
 
 		if ($request->date) {
 			$date = \DateTime::createFromFormat('d F Y', $request->date);
-			$dateQuery .= "AND t.start_date > '" . $date->format('Y-m-d') . "'";
+
+			if ($date > $now) {
+					$dateQuery = " AND t.start_date > '" . $date->format('Y-m-d') . "'";
+					$options = [];
+			}
 		}
 
 		if ($request->category_id) {
@@ -379,19 +383,23 @@ class TasksController extends Controller
 				. ")";
 		}
 
+		if (strcmp($request->order_by, 'newest') == 0) {
+			$orderQuery = " ORDER BY t.created_at DESC";
+		} else {
+			$orderQuery = " ORDER BY t.start_date, t.start_time";
+		}
+
 		$query = "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
 			t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
-			c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
-			u.reputation
+			c.name AS category_name, u.id AS user_id, u.username, u.profile_photo
 			FROM Task t, Category c, Users u
 			WHERE t.category = c.id
-			AND t.start_date > :now
 			AND t.posted_by = u.id"
 			. $catQuery
 			. $dateQuery
-			. " ORDER BY t.created_at DESC";
+			. $orderQuery;
 
-		$tasks = \DB::select($query, [ 'now' => new \DateTime() ]);
+		$tasks = \DB::select($query, $options);
 
 		$allCats = \DB::select("SELECT id, name FROM category");
 
