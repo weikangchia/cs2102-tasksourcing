@@ -21,12 +21,18 @@
           <div class="ui big label blue">
             {{ $user->username }}
           </div>
+
         </div>
         <div class="ten wide column">
           <h2>Edit Profile</h2>
           Joined TaskHopper @ {{ date('M d, Y', strtotime($user->created_at)) }}
 
-          <div class="ui hidden divider"></div>
+          <br/><br/>
+          @if($user->completed_all)
+          <i class="trophy icon"></i> Posted tasks from all category
+          @endif
+
+          <br/><br/>
 
           {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT', 'class' => 'ui form', 'files' => true)) }}
           <div class="field">

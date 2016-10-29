@@ -90,6 +90,23 @@ class User extends Authenticatable
       $user->created_at = $query[0]->created_at;
       $user->profile_photo = $query[0]->profile_photo;
       $user->bio = $query[0]->bio;
+      $user->completed_all = false;
+    } catch(QueryException $e) {
+      return false;
+    }
+
+    try {
+      $completed_all = \DB::select("SELECT true from users u, task t
+        WHERE t.posted_by = u.id
+        AND u.id = :id
+        group by u.id
+        having count(distinct t.category) = (select count(*) from category)",
+        [
+          'id' => $key,
+        ]);
+      if(sizeof($completed_all) == 1) {
+        $user->completed_all = true;
+      }
     } catch(QueryException $e) {
       return false;
     }

@@ -31,12 +31,27 @@ class EventController extends Controller
                         'u_id' => Auth::id()
                     ]
                 );
+        $tasks = \DB::select(
+                    "SELECT t.id AS t_id, t.name AS task_name, t.description AS task_description,
+                        t.postal_code, t.start_date, t.start_time, t.cash_value, t.duration, t.location,
+                        c.name AS category_name, u.id AS user_id, u.username, u.profile_photo,
+                        (SELECT COUNT(*) FROM bid WHERE bid.t_id = t.id) as num_bidders
+                        FROM Task t, Category c, Users u
+                        WHERE t.category = c.id
+                        AND t.posted_by = u.id
+  					            AND t.start_date > :now
+                        AND t.posted_by = :u_id
+                        ORDER BY t.created_at DESC",
+              					[
+              						'now' => new \DateTime(),
+                          'u_id' => Auth::id()
+              					]);
 			}
 			catch(QueryException $e) {
 				return false;
 			}
 
-			return view('event')->with('events', $events);
+			return view('event', compact('events', 'tasks'));
 		}
 		else
         {
