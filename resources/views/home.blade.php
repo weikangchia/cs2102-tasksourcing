@@ -243,7 +243,7 @@
                 <i class="hand pointer icon"></i>
                 <div class="content">
                   <div class="title left aligned">Select your Tasker</div>
-                  <div class="description">Choose your Tasker based on bid price and reputation.</div>
+                  <div class="description">Choose your Tasker based on bid price.</div>
                 </div>
               </div>
               <div class="disabled step">
